@@ -24,4 +24,14 @@
     <style name="Theme.GitHubCloner.Profile.Name" parent="Theme.GitHubCloner">
         <item name="android:textColor">@color/balck_fc</item>
     </style>
+    <style name="Theme.GitHubCloner.Repository" parent="Theme.GitHubCloner">
+        <item name="android:background">@drawable/repo_bg</item>
+    </style>
+    <style name="Theme.GitHubCloner.Repository.Name" parent="Theme.GitHubCloner">
+        <item name="android:textColor">@color/balck_fc</item>
+    </style>
+    <style name="Theme.GitHubCloner.Counter" parent="Theme.GitHubCloner">
+        <item name="android:background">@drawable/counter_bg</item>
+        <item name="android:textColor">@color/black_dim</item>
+    </style>
 </resources>

@@ -4,14 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
-    android:background="@drawable/repo_bg"
+    style="@style/Theme.GitHubCloner.Repository"
     android:layout_marginBottom="10dp"
     android:clickable="true"
     android:focusable="true">
 
     <TextView
         android:id="@+id/txtName"
-        android:textColor="#603F83"
+        style="@style/Theme.GitHubCloner.Repository.Name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Loading..."

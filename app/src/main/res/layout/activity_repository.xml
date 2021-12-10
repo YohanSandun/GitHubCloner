@@ -64,7 +64,7 @@
                 android:id="@+id/profile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/profile_bg"
+                style="@style/Theme.GitHubCloner.Profile"
                 android:layout_margin="10dp"
                 >
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -74,7 +74,7 @@
                     android:layout_margin="10dp"/>
                 <TextView
                     android:id="@+id/txtName"
-                    android:textColor="#00203F"
+                    style="@style/Theme.GitHubCloner.Profile.Name"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginEnd="10dp"
@@ -241,7 +241,7 @@
                     android:layout_below="@id/txtCreated"
                     android:text="0 Repos"
                     android:padding="10dp"
-                    android:background="@drawable/repos_count_bg"
+                    style="@style/Theme.GitHubCloner.Counter"
                     android:textStyle="bold"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
@@ -255,7 +255,7 @@
                     android:layout_toRightOf="@id/txtRepos"
                     android:text="0 Gists"
                     android:padding="10dp"
-                    android:background="@drawable/repos_count_bg"
+                    style="@style/Theme.GitHubCloner.Counter"
                     android:textStyle="bold"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
