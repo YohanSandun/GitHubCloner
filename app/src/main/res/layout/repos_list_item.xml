@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:background="@drawable/ice_square"
+    android:layout_marginBottom="10dp">
+
+    <TextView
+        android:id="@+id/txtName"
+        android:textColor="#603F83"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Loading..."
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/txtDescription"
+        android:layout_below="@id/txtName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Loading..."/>
+
+    <TextView
+        android:id="@+id/txtStars"
+        android:layout_below="@id/txtLanguage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:drawableLeft="@drawable/ic_star"
+        android:drawablePadding="5dp"/>
+
+    <TextView
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:id="@+id/txtWatches"
+        android:layout_below="@id/txtLanguage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:drawableLeft="@drawable/ic_watch"
+        android:layout_toEndOf="@id/txtStars"
+        android:layout_toRightOf="@id/txtStars"
+        android:drawablePadding="5dp"/>
+
+    <TextView
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:id="@+id/txtForks"
+        android:layout_below="@id/txtLanguage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:drawableLeft="@drawable/ic_forks"
+        android:layout_toEndOf="@id/txtWatches"
+        android:layout_toRightOf="@id/txtWatches"
+        android:drawablePadding="5dp"/>
+
+    <TextView
+        android:paddingLeft="5dp"
+        android:paddingEnd="5dp"
+        android:paddingRight="5dp"
+        android:paddingStart="5dp"
+        android:id="@+id/txtLanguage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Language"
+        android:textColor="#000"
+        android:textStyle="bold"
+        android:background="@drawable/language_bg"
+        android:layout_below="@id/txtDescription"/>
+
+    <TextView
+        android:id="@+id/txtUpdate"
+        android:layout_below="@id/txtLanguage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textStyle="italic"
+        android:text="Loading..."/>
+
+</RelativeLayout>

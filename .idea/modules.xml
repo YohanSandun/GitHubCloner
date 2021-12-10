@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/GitHub_Cloner.iml" filepath="$PROJECT_DIR$/.idea/modules/GitHub_Cloner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/GitHub_Cloner.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/GitHub_Cloner.app.iml" />
+    </modules>
+  </component>
+</project>
