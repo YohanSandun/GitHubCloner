@@ -20,6 +20,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:padding="3dp"
+            android:src="@drawable/ic_back"
             android:clickable="true"
             android:id="@+id/btnBack"/>
 

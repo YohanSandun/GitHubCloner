@@ -29,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,11 +42,10 @@ public class RepositoryActivity extends AppCompatActivity {
     private String user;
     private ReposAdapter adapter;
     private boolean noMoreRepos;
-    private int previousTotalItemCount;
-    private boolean loading;
 
     private ProgressBar loadingPb;
     private TextView txtNoMoreRepos;
+    private LanguageColors colors;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,8 @@ public class RepositoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_repository);
 
         repos = new ArrayList<>();
-        adapter = new ReposAdapter(repos);
+        colors = new LanguageColors(loadJSONFromAsset());
+        adapter = new ReposAdapter(this, repos, colors);
 
         Intent intent = getIntent();
         user = intent.getStringExtra("user");
@@ -191,5 +192,21 @@ public class RepositoryActivity extends AppCompatActivity {
         });
 
         queue.add(reposRequest);
+    }
+
+    public String loadJSONFromAsset() {
+        String json = null;
+        try {
+            InputStream is = getAssets().open("colors.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
     }
 }

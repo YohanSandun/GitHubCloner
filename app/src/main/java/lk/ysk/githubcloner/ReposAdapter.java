@@ -1,6 +1,9 @@
 package lk.ysk.githubcloner;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +22,8 @@ import java.util.List;
 public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ViewHolder> {
 
     private final List<RepoModel> repos;
+    private final LanguageColors colors;
+    private final Context context;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView txtName, txtDescription,txtStars,txtWatches,txtUpdate, txtLanguage, txtForks;
@@ -63,8 +68,10 @@ public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ViewHolder> 
         }
     }
 
-    public ReposAdapter(List<RepoModel> repos) {
+    public ReposAdapter(Context context, List<RepoModel> repos, LanguageColors colors) {
         this.repos = repos;
+        this.colors = colors;
+        this.context = context;
     }
 
     @NonNull
@@ -86,8 +93,35 @@ public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ViewHolder> 
         holder.getTxtForks().setText(repo.getForksString());
         if (repo.getLanguage() == null)
             holder.getTxtLanguage().setVisibility(View.GONE);
-        else
+        else {
             holder.getTxtLanguage().setText(repo.getLanguage());
+            int color = colors.getColor(repo.getLanguage());
+            if (color != Color.TRANSPARENT) {
+                Drawable drawable = context.getDrawable(R.drawable.orange_square);
+                drawable.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+                holder.getTxtLanguage().setBackground(drawable);
+                holder.getTxtLanguage().setTextColor(isBrightColor(color) ? Color.BLACK : Color.WHITE);
+            }
+        }
+    }
+
+    private boolean isBrightColor(int color) {
+        if (android.R.color.transparent == color)
+            return true;
+
+        boolean rtnValue = false;
+
+        int[] rgb = { Color.red(color), Color.green(color), Color.blue(color) };
+
+        int brightness = (int) Math.sqrt(rgb[0] * rgb[0] * .241 + rgb[1]
+                * rgb[1] * .691 + rgb[2] * rgb[2] * .068);
+
+        // color is light
+        if (brightness >= 200) {
+            rtnValue = true;
+        }
+
+        return rtnValue;
     }
 
     @Override
