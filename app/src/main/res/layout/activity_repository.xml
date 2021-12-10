@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RepositoryActivity">
+
     <RelativeLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:elevation="5dp"
         android:translationZ="4dp"
-        android:background="#a4b">
+        style="@style/Theme.GitHubCloner.AppBar">
 
         <ImageView
             android:layout_width="30dp"
@@ -23,6 +24,7 @@
             android:id="@+id/btnBack"/>
 
         <TextView
+            style="@style/Theme.GitHubCloner.AppBar"
             android:id="@+id/appBarText"
             android:layout_toEndOf="@id/btnBack"
             android:layout_toRightOf="@id/btnBack"
@@ -62,7 +64,7 @@
                 android:id="@+id/profile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/mint_square"
+                android:background="@drawable/profile_bg"
                 android:layout_margin="10dp"
                 >
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -209,7 +211,7 @@
                     android:text="Loading..."
                     />
                 <TextView
-                    android:background="@drawable/admin_bg"
+                    android:background="@drawable/yellow_square"
                     android:id="@+id/txtAdmin"
                     android:textStyle="bold"
                     android:paddingStart="10dp"
@@ -261,7 +263,10 @@
             </RelativeLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_margin="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
                 android:id="@+id/lstRepos"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

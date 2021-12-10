@@ -4,8 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
-    android:background="@drawable/ice_square"
-    android:layout_marginBottom="10dp">
+    android:background="@drawable/repo_bg"
+    android:layout_marginBottom="10dp"
+    android:clickable="true"
+    android:focusable="true">
 
     <TextView
         android:id="@+id/txtName"
@@ -68,7 +70,7 @@
         android:text="Language"
         android:textColor="#000"
         android:textStyle="bold"
-        android:background="@drawable/language_bg"
+        android:background="@drawable/orange_square"
         android:layout_below="@id/txtDescription"/>
 
     <TextView
