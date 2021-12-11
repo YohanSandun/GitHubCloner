@@ -1,4 +1,4 @@
-package lk.ysk.githubcloner;
+package lk.ysk.githubcloner.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+
+import lk.ysk.githubcloner.R;
 
 public class MainActivity extends AppCompatActivity {
 

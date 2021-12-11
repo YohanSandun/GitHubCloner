@@ -1,4 +1,4 @@
-package lk.ysk.githubcloner;
+package lk.ysk.githubcloner.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
@@ -30,6 +30,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import lk.ysk.githubcloner.LanguageColors;
+import lk.ysk.githubcloner.R;
+import lk.ysk.githubcloner.RepoModel;
+import lk.ysk.githubcloner.ReposAdapter;
 
 public class UserActivity extends AppCompatActivity {
 
