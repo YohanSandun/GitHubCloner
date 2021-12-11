@@ -1,7 +1,9 @@
 package lk.ysk.githubcloner.ui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -9,6 +11,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -31,6 +34,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import lk.ysk.githubcloner.LanguageColors;
+import lk.ysk.githubcloner.OnRepoClickedListener;
 import lk.ysk.githubcloner.R;
 import lk.ysk.githubcloner.RepoModel;
 import lk.ysk.githubcloner.ReposAdapter;
@@ -45,7 +49,7 @@ public class UserActivity extends AppCompatActivity {
 
     private ProgressBar loadingPb;
     private TextView txtNoMoreRepos;
-    private LanguageColors colors;
+    public static LanguageColors colors;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +58,11 @@ public class UserActivity extends AppCompatActivity {
 
         repos = new ArrayList<>();
         colors = new LanguageColors(loadJSONFromAsset());
-        adapter = new ReposAdapter(this, repos, colors);
+        adapter = new ReposAdapter(this, repos, colors, repo -> {
+            Intent intent = new Intent(UserActivity.this, RepoActivity.class);
+            intent.putExtra("url", repo.getUrl());
+            startActivity(intent);
+        });
 
         Intent intent = getIntent();
         user = intent.getStringExtra("user");
@@ -82,6 +90,7 @@ public class UserActivity extends AppCompatActivity {
         RecyclerView lstRepos = findViewById(R.id.lstRepos);
         lstRepos.setLayoutManager(new LinearLayoutManager(this));
         lstRepos.setAdapter(adapter);
+        lstRepos.setItemAnimator(new DefaultItemAnimator());
 
         RequestQueue queue = Volley.newRequestQueue(this);
         final Activity activity = this;

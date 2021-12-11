@@ -24,12 +24,15 @@ public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ViewHolder> 
     private final List<RepoModel> repos;
     private final LanguageColors colors;
     private final Context context;
+    private final OnRepoClickedListener clickedListener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView txtName, txtDescription,txtStars,txtWatches,txtUpdate, txtLanguage, txtForks;
+        private View baseView;
 
         public ViewHolder(View view) {
             super(view);
+            baseView = view;
             txtName = view.findViewById(R.id.txtName);
             txtDescription = view.findViewById(R.id.txtDescription);
             txtStars = view.findViewById(R.id.txtStars);
@@ -37,6 +40,10 @@ public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ViewHolder> 
             txtUpdate = view.findViewById(R.id.txtUpdate);
             txtLanguage = view.findViewById(R.id.txtLanguage);
             txtForks = view.findViewById(R.id.txtForks);
+        }
+
+        public View getBaseView() {
+            return baseView;
         }
 
         public TextView getTxtName() {
@@ -68,10 +75,11 @@ public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ViewHolder> 
         }
     }
 
-    public ReposAdapter(Context context, List<RepoModel> repos, LanguageColors colors) {
+    public ReposAdapter(Context context, List<RepoModel> repos, LanguageColors colors, OnRepoClickedListener clickedListener) {
         this.repos = repos;
         this.colors = colors;
         this.context = context;
+        this.clickedListener = clickedListener;
     }
 
     @NonNull
@@ -97,15 +105,18 @@ public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ViewHolder> 
             holder.getTxtLanguage().setText(repo.getLanguage());
             int color = colors.getColor(repo.getLanguage());
             if (color != Color.TRANSPARENT) {
-                Drawable drawable = context.getDrawable(R.drawable.orange_square);
+                Drawable drawable = context.getDrawable(R.drawable.white_square);
                 drawable.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
                 holder.getTxtLanguage().setBackground(drawable);
                 holder.getTxtLanguage().setTextColor(isBrightColor(color) ? Color.BLACK : Color.WHITE);
             }
         }
+        holder.getBaseView().setOnClickListener(view -> {
+            clickedListener.OnClick(repo);
+        });
     }
 
-    private boolean isBrightColor(int color) {
+    public static boolean isBrightColor(int color) {
         if (android.R.color.transparent == color)
             return true;
 

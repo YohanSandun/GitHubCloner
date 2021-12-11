@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.RepoActivity">
+
+    <RelativeLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:elevation="5dp"
+        android:translationZ="4dp"
+        style="@style/Theme.GitHubCloner.AppBar">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:padding="3dp"
+            android:src="@drawable/ic_back"
+            android:clickable="true"
+            android:id="@+id/btnBack"/>
+
+        <TextView
+            style="@style/Theme.GitHubCloner.AppBar"
+            android:id="@+id/appBarText"
+            android:layout_toEndOf="@id/btnBack"
+            android:layout_toRightOf="@id/btnBack"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Repository"/>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:padding="3dp"
+
+            android:clickable="true"
+            android:id="@+id/btnSettings"/>
+
+    </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nesterScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/appBar">
+        <RelativeLayout
+            android:layout_below="@id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:id="@+id/details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Theme.GitHubCloner.Profile"
+                android:layout_margin="10dp"
+                >
+
+                <TextView
+                    android:id="@+id/txtDescription"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="10dp"
+                    android:textStyle="bold"
+                    android:layout_marginRight="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_height="wrap_content"
+                    android:text="Loading..."/>
+
+                <TextView
+                    android:id="@+id/txtUpdated"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="italic"
+                    android:layout_below="@id/txtDescription"
+                    android:text="Loading..."/>
+
+                <TextView
+                    android:id="@+id/txtStars"
+                    android:layout_below="@id/txtUpdated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:drawableLeft="@drawable/ic_star"
+                    android:drawablePadding="5dp"/>
+
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:id="@+id/txtWatches"
+                    android:layout_below="@id/txtUpdated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:drawableLeft="@drawable/ic_watch"
+                    android:layout_toEndOf="@id/txtStars"
+                    android:layout_toRightOf="@id/txtStars"
+                    android:drawablePadding="5dp"/>
+
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:id="@+id/txtForks"
+                    android:layout_below="@id/txtUpdated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:drawableLeft="@drawable/ic_forks"
+                    android:layout_toEndOf="@id/txtWatches"
+                    android:layout_toRightOf="@id/txtWatches"
+                    android:drawablePadding="5dp"/>
+
+                <com.google.android.flexbox.FlexboxLayout
+                    android:visibility="gone"
+                    android:layout_margin="10dp"
+                    android:layout_below="@id/txtStars"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gridLanguages"
+                    app:flexWrap="wrap"
+                    />
+
+                <lk.ysk.githubcloner.ui.widgets.SegmentProgressBar
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_below="@id/gridLanguages"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:id="@+id/segmentPb"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/btnClone"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:paddingRight="20dp"
+                android:paddingEnd="20dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_below="@id/details"
+                android:text="Clone"
+                style="@style/Theme.GitHubCloner.Counter"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="10dp"
+                style="@style/Theme.GitHubCloner.Repository"
+                android:layout_marginStart="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:id="@+id/lstRepos"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/btnClone"/>
+
+            <TextView
+                android:id="@+id/txtNoMoreRepos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:visibility="gone"
+                android:text="That's all!"
+                android:layout_below="@id/lstRepos"/>
+
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+    <ProgressBar
+        android:id="@+id/loadingMore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

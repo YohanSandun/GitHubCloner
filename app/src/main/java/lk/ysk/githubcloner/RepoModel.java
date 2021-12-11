@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 public class RepoModel {
     private int stars, forks, watches;
-    private String name, description, updated, language;
+    private String name, description, updated, language, url;
 
     public RepoModel(JSONObject object) {
         try {
@@ -15,6 +15,7 @@ public class RepoModel {
             name = object.getString("name").trim().replace("\r\n", " ").replace("\n"," ");
             description = object.getString("description").trim().replace("\r\n", " ").replace("\n"," ");
             updated = object.getString("updated_at").substring(0,10);
+            url = object.getString("url");
             if (!object.isNull("language"))
                 language = object.getString("language");
         } catch (JSONException e) {
@@ -76,6 +77,14 @@ public class RepoModel {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getStarsString() {
