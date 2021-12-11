@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    >
+
+    <TextView
+        android:id="@+id/txtCloning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cloning..."
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/txtFileName"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="File name"
+        android:layout_below="@id/txtCloning"/>
+
+    <TextView
+        android:id="@+id/txtFilePercent"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:text="100 %"
+        android:layout_below="@id/txtCloning"/>
+
+    <ProgressBar
+        android:id="@+id/filePb"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_below="@id/txtFileName"
+        style="?android:attr/progressBarStyleHorizontal"
+        />
+
+</RelativeLayout>
