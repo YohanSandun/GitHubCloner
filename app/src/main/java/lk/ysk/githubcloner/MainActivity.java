@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnLoad).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, RepositoryActivity.class);
+                Intent intent = new Intent(MainActivity.this, UserActivity.class);
                 intent.putExtra("user", txtUser.getText().toString());
                 startActivity(intent);
             }

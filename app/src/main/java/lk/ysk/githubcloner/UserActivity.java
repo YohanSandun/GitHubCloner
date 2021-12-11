@@ -1,6 +1,5 @@
 package lk.ysk.githubcloner;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,11 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -27,7 +24,6 @@ import com.bumptech.glide.Glide;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -35,7 +31,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RepositoryActivity extends AppCompatActivity {
+public class UserActivity extends AppCompatActivity {
 
     private List<RepoModel> repos;
     private int page = 1;
@@ -50,7 +46,7 @@ public class RepositoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_repository);
+        setContentView(R.layout.activity_user);
 
         repos = new ArrayList<>();
         colors = new LanguageColors(loadJSONFromAsset());
