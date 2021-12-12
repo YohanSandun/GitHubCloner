@@ -208,7 +208,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginEnd="10dp"
-                android:id="@+id/lstRepos"
+                android:id="@+id/rvContent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/btnDownloadZip"/>
@@ -221,11 +221,12 @@
                 android:padding="10dp"
                 android:visibility="gone"
                 android:text="That's all!"
-                android:layout_below="@id/lstRepos"/>
+                android:layout_below="@id/rvContent"/>
 
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
     <ProgressBar
+        android:visibility="gone"
         android:id="@+id/loadingMore"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -3,8 +3,11 @@ package lk.ysk.githubcloner.ui;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -50,7 +53,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import lk.ysk.githubcloner.Content;
 import lk.ysk.githubcloner.ContentFile;
+import lk.ysk.githubcloner.ContentsAdapter;
+import lk.ysk.githubcloner.OnContentClickedListener;
 import lk.ysk.githubcloner.R;
 import lk.ysk.githubcloner.RepoModel;
 import lk.ysk.githubcloner.ReposAdapter;
@@ -74,10 +80,16 @@ public class RepoActivity extends AppCompatActivity {
     private int requestCount = 0;
     private int currentIndex = 0;
 
+    private RecyclerView rvContents;
+    private ContentsAdapter contentsAdapter;
+    private List<Content> contentList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repo);
+
+        contentList = new ArrayList<>();
 
         Intent intent = getIntent();
         String repoUrl = intent.getStringExtra("url");
@@ -90,6 +102,7 @@ public class RepoActivity extends AppCompatActivity {
         TextView txtForks = findViewById(R.id.txtForks);
         gridLayout = findViewById(R.id.gridLanguages);
         segmentPb = findViewById(R.id.segmentPb);
+        rvContents = findViewById(R.id.rvContent);
 
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonObjectRequest repoRequest = new JsonObjectRequest(repoUrl, new Response.Listener<JSONObject>() {
@@ -104,6 +117,7 @@ public class RepoActivity extends AppCompatActivity {
                     txtWatches.setText(repository.getWatchesString());
                     txtForks.setText(repository.getForksString());
                     loadLanguages();
+                    loadContents(repository.getContentsUrl().substring(0, repository.getContentsUrl().lastIndexOf('/')), false);
                 } catch (Exception e) {
                     Log.d("YOHAN", "onErrorResponse(User): " + e.getMessage());
                 }
@@ -154,6 +168,78 @@ public class RepoActivity extends AppCompatActivity {
             }
         });
 
+        rvContents.setLayoutManager(new LinearLayoutManager(this));
+        rvContents.setItemAnimator(new DefaultItemAnimator());
+        contentsAdapter = new ContentsAdapter(contentList, new OnContentClickedListener() {
+            @Override
+            public void onClick(Content content) {
+                if (content.getType() == Content.Type.GO_BACK) {
+                    goBack(content);
+                } else if (content.getType() == Content.Type.DIR) {
+                    contentList.clear();
+                    contentsAdapter.notifyDataSetChanged();
+                    loadContents(content.getUrl(), true);
+                } else {
+
+                }
+            }
+        });
+        rvContents.setAdapter(contentsAdapter);
+
+    }
+
+    private void goBack(Content content) {
+        contentList.clear();
+        contentsAdapter.notifyDataSetChanged();
+        String url = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
+        Log.d("YOHAN", "last: " + url);
+        if (url.equals(repository.getContentsUrl().substring(0, repository.getContentsUrl().lastIndexOf('/'))))
+            loadContents(url, false);
+        else
+            loadContents(url, true);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (contentList.size() > 0 && contentList.get(0).getType() == Content.Type.GO_BACK) {
+            goBack(contentList.get(0));
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    private String currentUrl;
+
+    private void loadContents(String url, boolean goBackAvailable) {
+        currentUrl = url;
+
+        contentList.clear();
+        if (goBackAvailable)
+            contentList.add(new Content("..", Content.Type.GO_BACK, "", "", 0));
+
+        //currentUrl = url;
+        JsonArrayRequest reposRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject file = response.getJSONObject(i);
+                        String fname = file.getString("name");
+                        Content.Type type = file.getString("type").equals("dir") ? Content.Type.DIR : Content.Type.FILE;
+                        contentList.add(new Content(fname, type, file.getString("url"), file.getString("download_url"), file.getLong("size")));
+                    }
+                } catch (Exception error) {
+                    Log.d("YOHAN", "Download Error : " + error.getMessage());
+                }
+                contentsAdapter.notifyDataSetChanged();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("YOHAN", "onErrorResponse: " + error.getMessage());
+            }
+        });
+        queue.add(reposRequest);
     }
 
     private void cloneAsArchive(String url, String extention) {
