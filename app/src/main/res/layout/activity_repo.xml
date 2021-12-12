@@ -157,7 +157,7 @@
             </RelativeLayout>
 
             <TextView
-                android:id="@+id/btnClone"
+                android:id="@+id/btnDownloadZip"
                 android:clickable="true"
                 android:focusable="true"
                 android:layout_width="wrap_content"
@@ -171,8 +171,34 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_below="@id/details"
-                android:text="Clone"
-                style="@style/Theme.GitHubCloner.Counter"
+                android:drawableLeft="@drawable/ic_download"
+                android:drawablePadding="5dp"
+                android:textStyle="bold"
+                android:text="ZIP"
+                style="@style/Theme.GitHubCloner.Download"
+                />
+            <TextView
+                android:id="@+id/btnDownloadTar"
+                android:layout_toEndOf="@id/btnDownloadZip"
+                android:layout_toRightOf="@id/btnDownloadZip"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:paddingRight="20dp"
+                android:paddingEnd="20dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_below="@id/details"
+                android:drawableLeft="@drawable/ic_download"
+                android:drawablePadding="5dp"
+                android:textStyle="bold"
+                android:text="TAR"
+                style="@style/Theme.GitHubCloner.Download"
                 />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -185,7 +211,7 @@
                 android:id="@+id/lstRepos"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/btnClone"/>
+                android:layout_below="@id/btnDownloadZip"/>
 
             <TextView
                 android:id="@+id/txtNoMoreRepos"

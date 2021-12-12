@@ -34,4 +34,8 @@
         <item name="android:background">@drawable/counter_bg</item>
         <item name="android:textColor">@color/black_dim</item>
     </style>
+    <style name="Theme.GitHubCloner.Download" parent="Theme.GitHubCloner">
+        <item name="android:background">@drawable/download_bg</item>
+        <item name="android:textColor">@color/black_dim</item>
+    </style>
 </resources>

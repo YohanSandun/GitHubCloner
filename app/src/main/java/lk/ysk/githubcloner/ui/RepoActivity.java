@@ -1,11 +1,13 @@
 package lk.ysk.githubcloner.ui;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -67,6 +69,11 @@ public class RepoActivity extends AppCompatActivity {
     private TextView txtName, txtPercentage;
     private ProgressBar pbDownload;
 
+    private final List<ContentFile> filesToDownload = new ArrayList<>();
+    private RequestQueue queue;
+    private int requestCount = 0;
+    private int currentIndex = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,20 +126,63 @@ public class RepoActivity extends AppCompatActivity {
 
         this.queue = Volley.newRequestQueue(this);
 
-        findViewById(R.id.btnClone).setOnClickListener(new View.OnClickListener() {
+//        findViewById(R.id.btnClone).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                githubDir = new File(Environment.getExternalStorageDirectory(), "GitHub");
+//                githubDir.mkdirs();
+//                cloneDir = new File(githubDir, repository.getName());
+//                cloneDir.mkdirs();
+//
+//                dialogColning.show();
+//                txtClone.setText("Reading Meta-data");
+//                cloneRepo( repository.getContentsUrl().substring(0, repository.getContentsUrl().lastIndexOf('/')), cloneDir);
+//            }
+//        });
+
+        findViewById(R.id.btnDownloadZip).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                githubDir = new File(Environment.getExternalStorageDirectory(), "GitHub");
-                githubDir.mkdirs();
-                cloneDir = new File(githubDir, repository.getName());
-                cloneDir.mkdirs();
-
-                dialogColning.show();
-                txtClone.setText("Reading Meta-data");
-                cloneRepo( repository.getContentsUrl().substring(0, repository.getContentsUrl().lastIndexOf('/')), cloneDir);
+                cloneAsArchive(repoUrl + "/zipball", ".zip");
             }
         });
 
+        findViewById(R.id.btnDownloadTar).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cloneAsArchive(repoUrl + "/tarball", ".tar.gz");
+            }
+        });
+
+    }
+
+    private void cloneAsArchive(String url, String extention) {
+        githubDir = new File(Environment.getExternalStorageDirectory(), "GitHub");
+        githubDir.mkdirs();
+
+        //findViewById(R.id.btnDownloadZip).setEnabled(false);
+        String fname = repository.getName() + "-" + repository.getDefaultBranch() + extention;
+        File file = new File(githubDir, fname);
+        if (file.exists()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(RepoActivity.this);
+
+            builder.setTitle("Confirm");
+            builder.setMessage("There is a file already with same name. Do you want to overwrite it?");
+
+            builder.setPositiveButton("YES", (dialog, which) -> {
+                file.delete();
+                new DownloadArchive(fname).execute(url, file.toString());
+                dialog.dismiss();
+            });
+
+            builder.setNegativeButton("NO", (dialog, which) -> {
+                dialog.dismiss();
+            });
+
+            AlertDialog alert = builder.create();
+            alert.show();
+        } else
+            new DownloadArchive(fname).execute(url, file.toString());
     }
 
     private void loadLanguages() {
@@ -192,11 +242,6 @@ public class RepoActivity extends AppCompatActivity {
         queue.add(langsRequest);
     }
 
-    private List<ContentFile> filesToDownload = new ArrayList<>();
-    private RequestQueue queue;
-    private int requestCount = 0;
-    private int currentIndex = 0;
-
     private void cloneRepo(String url, File dir) {
         JsonArrayRequest reposRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
             @Override
@@ -232,15 +277,6 @@ public class RepoActivity extends AppCompatActivity {
                     try {
                         pbDownload.setMax(filesToDownload.size());
                         new DownloadFileFromURL(filesToDownload.get(currentIndex).getFileName()).execute(filesToDownload.get(currentIndex).getUrl(), filesToDownload.get(currentIndex).getLocalFile());
-//                        for (int i = 0; i < filesToDownload.size(); i++) {
-//                            Log.d("YOHAN", "downloadFiles: " + filesToDownload.get(i).getUrl() + " -> " + filesToDownload.get(i).getLocalFile());
-//                            pbDownload.setProgress(i+1);
-//                            txtPercentage.setText(String.format("%.1f%%", (i+1)/(float)pbDownload.getMax()*100f));
-//                            txtFileName.setText(String.format("%s %.2fKB", filesToDownload.get(i).getFileName(), filesToDownload.get(i).getSize()/1024f));
-//                            pbDownload.invalidate();
-//                            new DownloadFileFromURL().execute(filesToDownload.get(i).getUrl(), filesToDownload.get(i).getLocalFile());
-//                        }
-//                        dialogColning.dismiss();
                     } catch (Exception e) {
 
                     }
@@ -345,6 +381,98 @@ public class RepoActivity extends AppCompatActivity {
             else {
                 dialogColning.dismiss();
             }
+        }
+
+    }
+
+    class DownloadArchive extends AsyncTask<String, String, String> {
+
+        private final String fileName;
+
+        public DownloadArchive(String fileName) {
+            this.fileName = fileName;
+        }
+
+        /**
+         * Before starting background thread Show Progress Bar Dialog
+         * */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialogColning.show();
+            txtFileName.setText(fileName);
+        }
+
+        /**
+         * Downloading file in background thread
+         * */
+        @Override
+        protected String doInBackground(String... f_url) {
+            int count;
+            try {
+                URL url = new URL(f_url[0]);
+                URLConnection connection = url.openConnection();
+                connection.connect();
+
+                // this will be useful so that you can show a tipical 0-100%
+                // progress bar
+                int lenghtOfFile = connection.getContentLength();
+
+                // download the file
+                InputStream input = new BufferedInputStream(url.openStream(),
+                        8192);
+
+                // Output stream
+                OutputStream output = new FileOutputStream(f_url[1]);
+
+                byte data[] = new byte[1024];
+
+                long total = 0;
+
+                while ((count = input.read(data)) != -1) {
+                    total += count;
+                    // publishing the progress....
+                    // After this onProgressUpdate will be called
+                    publishProgress("" + (int) ((total * 100) / lenghtOfFile));
+
+                    // writing data to file
+                    output.write(data, 0, count);
+                }
+
+                // flushing output
+                output.flush();
+
+                // closing streams
+                output.close();
+                input.close();
+
+            } catch (Exception e) {
+                Log.e("Error: ", e.getMessage());
+            }
+
+            return null;
+        }
+
+        /**
+         * Updating progress bar
+         * */
+        protected void onProgressUpdate(String... progress) {
+            // setting progress percentage
+            pbDownload.setProgress(Integer.parseInt(progress[0]));
+            txtPercentage.setText(String.format("%d%%", pbDownload.getProgress()));
+        }
+
+        /**
+         * After completing background task Dismiss the progress dialog
+         * **/
+        @Override
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog after the file was downloaded
+            //Log.d("YOHAN", "Downloaded : ");
+            //currentIndex++;
+            pbDownload.setProgress(100);
+            txtPercentage.setText("100%");
+            dialogColning.dismiss();
         }
 
     }
