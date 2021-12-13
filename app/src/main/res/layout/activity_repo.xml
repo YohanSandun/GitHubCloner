@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,43 +18,38 @@
         <ImageView
             android:layout_width="30dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:padding="3dp"
             android:src="@drawable/ic_back"
             android:clickable="true"
-            android:id="@+id/btnBack"/>
+            android:id="@+id/btnBack"
+            android:focusable="true" />
 
         <TextView
             style="@style/Theme.GitHubCloner.AppBar"
             android:id="@+id/appBarText"
             android:layout_toEndOf="@id/btnBack"
-            android:layout_toRightOf="@id/btnBack"
             android:paddingStart="10dp"
-            android:paddingLeft="10dp"
             android:gravity="center"
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Repository"/>
+            android:text="@string/repositories"/>
 
         <ImageView
             android:layout_width="30dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
             android:layout_marginEnd="10dp"
             android:padding="3dp"
-
             android:clickable="true"
-            android:id="@+id/btnSettings"/>
-
+            android:id="@+id/btnSettings"
+            android:focusable="true" />
     </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/nesterScroll"
+        android:id="@+id/nestedScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/appBar">
@@ -67,8 +63,8 @@
                 android:layout_height="wrap_content"
                 style="@style/Theme.GitHubCloner.Profile"
                 android:layout_margin="10dp"
+                android:paddingBottom="10dp"
                 >
-
                 <TextView
                     android:id="@+id/txtDescription"
                     android:layout_marginStart="10dp"
@@ -79,8 +75,7 @@
                     android:layout_marginRight="10dp"
                     android:layout_width="match_parent"
                     android:layout_marginBottom="5dp"
-                    android:layout_height="wrap_content"
-                    android:text="Loading..."/>
+                    android:layout_height="wrap_content"/>
 
                 <TextView
                     android:id="@+id/txtUpdated"
@@ -92,44 +87,35 @@
                     android:layout_marginBottom="5dp"
                     android:layout_height="wrap_content"
                     android:textStyle="italic"
-                    android:layout_below="@id/txtDescription"
-                    android:text="Loading..."/>
+                    android:layout_below="@id/txtDescription"/>
 
                 <TextView
                     android:id="@+id/txtStars"
                     android:layout_below="@id/txtUpdated"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0"
                     android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:drawableLeft="@drawable/ic_star"
+                    android:drawableStart="@drawable/ic_star"
                     android:drawablePadding="5dp"/>
 
                 <TextView
-                    android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
                     android:id="@+id/txtWatches"
                     android:layout_below="@id/txtUpdated"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0"
-                    android:drawableLeft="@drawable/ic_watch"
+                    android:drawableStart="@drawable/ic_watch"
                     android:layout_toEndOf="@id/txtStars"
-                    android:layout_toRightOf="@id/txtStars"
                     android:drawablePadding="5dp"/>
 
                 <TextView
-                    android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
                     android:id="@+id/txtForks"
                     android:layout_below="@id/txtUpdated"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0"
-                    android:drawableLeft="@drawable/ic_forks"
+                    android:drawableStart="@drawable/ic_forks"
                     android:layout_toEndOf="@id/txtWatches"
-                    android:layout_toRightOf="@id/txtWatches"
                     android:drawablePadding="5dp"/>
 
                 <com.google.android.flexbox.FlexboxLayout
@@ -151,55 +137,79 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginBottom="10dp"
                     android:id="@+id/segmentPb"/>
 
             </RelativeLayout>
 
-            <TextView
-                android:id="@+id/btnDownloadZip"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/llButtonContainer"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="20dp"
-                android:paddingRight="20dp"
-                android:paddingEnd="20dp"
-                android:paddingLeft="20dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
                 android:layout_below="@id/details"
-                android:drawableLeft="@drawable/ic_download"
-                android:drawablePadding="5dp"
-                android:textStyle="bold"
-                android:text="ZIP"
-                style="@style/Theme.GitHubCloner.Download"
-                />
-            <TextView
-                android:id="@+id/btnDownloadTar"
-                android:layout_toEndOf="@id/btnDownloadZip"
-                android:layout_toRightOf="@id/btnDownloadZip"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="20dp"
-                android:paddingRight="20dp"
-                android:paddingEnd="20dp"
-                android:paddingLeft="20dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_below="@id/details"
-                android:drawableLeft="@drawable/ic_download"
-                android:drawablePadding="5dp"
-                android:textStyle="bold"
-                android:text="TAR"
-                style="@style/Theme.GitHubCloner.Download"
-                />
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:id="@+id/btnDownloadZip"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="20dp"
+                    android:paddingRight="20dp"
+                    android:gravity="center"
+                    android:paddingEnd="20dp"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:drawableStart="@drawable/ic_download"
+                    android:drawablePadding="5dp"
+                    android:textStyle="bold"
+                    android:text="@string/zip"
+                    style="@style/Theme.GitHubCloner.Download"
+                    />
+                <TextView
+                    android:id="@+id/btnDownloadTar"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingEnd="20dp"
+                    android:paddingLeft="20dp"
+                    android:gravity="center"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_marginStart="10dp"
+                    android:drawableStart="@drawable/ic_download"
+                    android:drawablePadding="5dp"
+                    android:textStyle="bold"
+                    android:text="@string/tar"
+                    style="@style/Theme.GitHubCloner.Download"
+                    />
+                <TextView
+                    android:id="@+id/btnDownloadSelected"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingEnd="20dp"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:drawableStart="@drawable/ic_download"
+                    android:drawablePadding="5dp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:text="@string/selected"
+                    style="@style/Theme.GitHubCloner.Download"
+                    />
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_marginTop="10dp"
@@ -211,25 +221,26 @@
                 android:id="@+id/rvContent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/btnDownloadZip"/>
+                android:layout_below="@id/llButtonContainer"/>
 
             <TextView
-                android:id="@+id/txtNoMoreRepos"
+                android:id="@+id/txtThatsAll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="10dp"
                 android:visibility="gone"
-                android:text="That's all!"
+                android:text="@string/that_s_all"
                 android:layout_below="@id/rvContent"/>
+
+            <ProgressBar
+                android:id="@+id/pbLoading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/llButtonContainer"
+                android:layout_marginTop="40dp"
+                />
 
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
-    <ProgressBar
-        android:visibility="gone"
-        android:id="@+id/loadingMore"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"/>
-
 </RelativeLayout>

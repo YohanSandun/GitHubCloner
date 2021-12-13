@@ -7,24 +7,18 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -35,13 +29,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
 import com.google.android.flexbox.FlexboxLayout;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -59,16 +50,15 @@ import lk.ysk.githubcloner.ContentFile;
 import lk.ysk.githubcloner.ContentsAdapter;
 import lk.ysk.githubcloner.OnContentClickedListener;
 import lk.ysk.githubcloner.R;
-import lk.ysk.githubcloner.RepoModel;
-import lk.ysk.githubcloner.ReposAdapter;
-import lk.ysk.githubcloner.Repository;
+import lk.ysk.githubcloner.RepositoryAdapter;
+import lk.ysk.githubcloner.DetailedRepository;
 import lk.ysk.githubcloner.ui.widgets.SegmentProgressBar;
 
 import static androidx.core.content.FileProvider.getUriForFile;
 
 public class RepoActivity extends AppCompatActivity {
 
-    private Repository repository;
+    private DetailedRepository detailedRepository;
     private FlexboxLayout gridLayout;
     private SegmentProgressBar segmentPb;
 
@@ -76,7 +66,7 @@ public class RepoActivity extends AppCompatActivity {
     private Dialog dialogColning;
     private TextView txtFileName, txtClone;
     private TextView txtName, txtPercentage;
-    private ProgressBar pbDownload;
+    private ProgressBar pbDownload, pbLoading;
 
     private final List<ContentFile> filesToDownload = new ArrayList<>();
     private RequestQueue queue;
@@ -111,21 +101,22 @@ public class RepoActivity extends AppCompatActivity {
         gridLayout = findViewById(R.id.gridLanguages);
         segmentPb = findViewById(R.id.segmentPb);
         rvContents = findViewById(R.id.rvContent);
+        pbLoading = findViewById(R.id.pbLoading);
 
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonObjectRequest repoRequest = new JsonObjectRequest(repoUrl, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    repository = new Repository(response);
-                    txtName.setText(repository.getName());
-                    txtDescription.setText(repository.getDescription());
-                    txtUpdated.setText("Last Update " + repository.getUpdated());
-                    txtStars.setText(repository.getStarsString());
-                    txtWatches.setText(repository.getWatchesString());
-                    txtForks.setText(repository.getForksString());
+                    detailedRepository = new DetailedRepository(response);
+                    txtName.setText(detailedRepository.getName());
+                    txtDescription.setText(detailedRepository.getDescription());
+                    txtUpdated.setText("Last Update " + detailedRepository.getUpdated());
+                    txtStars.setText(detailedRepository.getStarsString());
+                    txtWatches.setText(detailedRepository.getWatchesString());
+                    txtForks.setText(detailedRepository.getForksString());
                     loadLanguages();
-                    loadContents(repository.getContentsUrl().substring(0, repository.getContentsUrl().lastIndexOf('/')), false);
+                    loadContents(detailedRepository.getContentsUrl().substring(0, detailedRepository.getContentsUrl().lastIndexOf('/')), false);
                 } catch (Exception e) {
                     Log.d("YOHAN", "onErrorResponse(User): " + e.getMessage());
                 }
@@ -176,6 +167,35 @@ public class RepoActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.btnDownloadSelected).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filesToDownload.clear();
+
+                cloneDir = new File(githubDir, detailedRepository.getName());
+                cloneDir.mkdirs();
+
+                dialogColning.show();
+                txtClone.setText("Reading Meta-data");
+
+                boolean dirFound = false;
+                for (int i = 0; i < contentList.size(); i++) {
+                    if (contentList.get(i).isSelected()) {
+                        if (contentList.get(i).getType() == Content.Type.FILE)
+                            filesToDownload.add(new ContentFile(contentList.get(i).getName(), new File(cloneDir, contentList.get(i).getName()).toString(), contentList.get(i).getDownloadUrl(), contentList.get(i).getSize()));
+                        else if (contentList.get(i).getType() == Content.Type.DIR) {
+                            dirFound = true;
+                            cloneRepo(contentList.get(i).getUrl(), new File(cloneDir, contentList.get(i).getName()));
+                        }
+                    }
+                }
+                if (!dirFound) {
+                    pbDownload.setMax(filesToDownload.size());
+                    new DownloadFileFromURL(filesToDownload.get(currentIndex).getFileName()).execute(filesToDownload.get(currentIndex).getUrl(), filesToDownload.get(currentIndex).getLocalFile());
+                }
+            }
+        });
+
         rvContents.setLayoutManager(new LinearLayoutManager(this));
         rvContents.setItemAnimator(new DefaultItemAnimator());
         contentsAdapter = new ContentsAdapter(contentList, new OnContentClickedListener() {
@@ -204,7 +224,7 @@ public class RepoActivity extends AppCompatActivity {
         contentList.clear();
         contentsAdapter.notifyDataSetChanged();
         String url = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
-        if (url.equals(repository.getContentsUrl().substring(0, repository.getContentsUrl().lastIndexOf('/'))))
+        if (url.equals(detailedRepository.getContentsUrl().substring(0, detailedRepository.getContentsUrl().lastIndexOf('/'))))
             loadContents(url, false);
         else
             loadContents(url, true);
@@ -223,6 +243,9 @@ public class RepoActivity extends AppCompatActivity {
 
     private void loadContents(String url, boolean goBackAvailable) {
         currentUrl = url;
+
+        rvContents.setVisibility(View.GONE);
+        pbLoading.setVisibility(View.VISIBLE);
 
         contentList.clear();
         if (goBackAvailable)
@@ -243,6 +266,8 @@ public class RepoActivity extends AppCompatActivity {
                     Log.d("YOHAN", "Download Error : " + error.getMessage());
                 }
                 contentsAdapter.notifyDataSetChanged();
+                rvContents.setVisibility(View.VISIBLE);
+                pbLoading.setVisibility(View.GONE);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -255,7 +280,7 @@ public class RepoActivity extends AppCompatActivity {
 
     private void cloneAsArchive(String url, String extention) {
         //findViewById(R.id.btnDownloadZip).setEnabled(false);
-        String fname = repository.getName() + "-" + repository.getDefaultBranch() + extention;
+        String fname = detailedRepository.getName() + "-" + detailedRepository.getDefaultBranch() + extention;
         File file = new File(githubDir, fname);
         if (file.exists()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(RepoActivity.this);
@@ -281,7 +306,7 @@ public class RepoActivity extends AppCompatActivity {
 
     private void loadLanguages() {
         RequestQueue queue = Volley.newRequestQueue(this);
-        JsonObjectRequest langsRequest = new JsonObjectRequest(repository.getLanguagesUrl(), new Response.Listener<JSONObject>() {
+        JsonObjectRequest langsRequest = new JsonObjectRequest(detailedRepository.getLanguagesUrl(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -308,12 +333,12 @@ public class RepoActivity extends AppCompatActivity {
                         txtLang.setLayoutParams(lp);
                         float percentage = (float) ((double) language.second / total);
                         txtLang.setText(String.format("%s %.1f%%", language.first, percentage * 100f));
-                        int color = UserActivity.colors.getColor(language.first);
+                        int color = UserActivity.languageColors.getColor(language.first);
                         if (color != Color.TRANSPARENT) {
                             Drawable drawable = RepoActivity.this.getDrawable(R.drawable.white_square);
                             drawable.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
                             txtLang.setBackground(drawable);
-                            txtLang.setTextColor(ReposAdapter.isBrightColor(color) ? Color.BLACK : Color.WHITE);
+                            txtLang.setTextColor(RepositoryAdapter.isBrightColor(color) ? Color.BLACK : Color.WHITE);
                             segmentPb.addSegment(color, percentage);
                         } else {
                             Drawable drawable = RepoActivity.this.getDrawable(R.drawable.orange_square);
@@ -337,6 +362,8 @@ public class RepoActivity extends AppCompatActivity {
     }
 
     private void cloneRepo(String url, File dir) {
+        if (!dir.exists())
+            dir.mkdirs();
         JsonArrayRequest reposRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {

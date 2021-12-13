@@ -17,43 +17,41 @@
         <ImageView
             android:layout_width="30dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:padding="3dp"
             android:src="@drawable/ic_back"
             android:clickable="true"
-            android:id="@+id/btnBack"/>
+            android:id="@+id/btnBack"
+            android:focusable="true"
+            android:contentDescription="@string/go_back" />
 
         <TextView
             style="@style/Theme.GitHubCloner.AppBar"
             android:id="@+id/appBarText"
             android:layout_toEndOf="@id/btnBack"
-            android:layout_toRightOf="@id/btnBack"
             android:paddingStart="10dp"
-            android:paddingLeft="10dp"
             android:gravity="center"
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Repositories"/>
+            android:text="@string/repositories"/>
 
         <ImageView
             android:layout_width="30dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
             android:layout_marginEnd="10dp"
             android:padding="3dp"
-
             android:clickable="true"
-            android:id="@+id/btnSettings"/>
+            android:id="@+id/btnSettings"
+            android:focusable="true"
+            android:contentDescription="@string/settings" />
 
     </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/nesterScroll"
+        android:id="@+id/nestedScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/appBar">
@@ -62,7 +60,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <RelativeLayout
-                android:id="@+id/profile"
+                android:id="@+id/profileContainer"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/Theme.GitHubCloner.Profile"
@@ -84,9 +83,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Loading..."
                     android:layout_toEndOf="@id/imgAvatar"
-                    android:layout_toRightOf="@id/imgAvatar"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
                 <TextView
@@ -98,9 +95,7 @@
                     android:layout_width="match_parent"
                     android:layout_marginBottom="5dp"
                     android:layout_height="wrap_content"
-                    android:text="Loading..."
                     android:layout_toEndOf="@id/imgAvatar"
-                    android:layout_toRightOf="@id/imgAvatar"
                     android:layout_below="@id/txtName"/>
                 <TextView
                     android:id="@+id/txtLocation"
@@ -111,39 +106,30 @@
                     android:layout_marginBottom="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Loading..."
                     android:layout_toEndOf="@id/imgAvatar"
-                    android:layout_toRightOf="@id/imgAvatar"
                     android:layout_below="@id/txtBio"
-                    android:drawableLeft="@drawable/ic_location"
+                    android:drawableStart="@drawable/ic_location"
                     android:drawablePadding="5dp"/>
-
                 <TextView
                     android:id="@+id/txtFollowers"
                     android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
                     android:layout_marginBottom="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Loading..."
                     android:layout_below="@id/txtLocation"
-                    android:drawableLeft="@drawable/ic_follower"
+                    android:drawableStart="@drawable/ic_follower"
                     android:drawablePadding="5dp"/>
                 <TextView
                     android:id="@+id/txtFollowing"
                     android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
                     android:layout_marginBottom="5dp"
                     android:layout_toEndOf="@id/txtFollowers"
-                    android:layout_toRightOf="@id/txtFollowers"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="· Loading..."
                     android:layout_below="@id/txtLocation"/>
                 <LinearLayout
-                    android:id="@+id/userDetails"
+                    android:id="@+id/userDetailsContainer"
                     android:layout_below="@id/txtFollowers"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -157,8 +143,7 @@
                         android:layout_marginBottom="5dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Loading..."
-                        android:drawableLeft="@drawable/ic_email"
+                        android:drawableStart="@drawable/ic_email"
                         android:drawablePadding="5dp"/>
                     <TextView
                         android:id="@+id/txtBlog"
@@ -169,8 +154,7 @@
                         android:layout_marginBottom="5dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Loading..."
-                        android:drawableLeft="@drawable/ic_blog"
+                        android:drawableStart="@drawable/ic_blog"
                         android:drawablePadding="5dp"/>
                     <TextView
                         android:id="@+id/txtTwitter"
@@ -181,8 +165,7 @@
                         android:layout_marginBottom="5dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Loading..."
-                        android:drawableLeft="@drawable/ic_twitter"
+                        android:drawableStart="@drawable/ic_twitter"
                         android:drawablePadding="5dp"/>
                     <TextView
                         android:id="@+id/txtCompany"
@@ -193,10 +176,8 @@
                         android:layout_marginBottom="5dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Loading..."
-                        android:drawableLeft="@drawable/ic_company"
+                        android:drawableStart="@drawable/ic_company"
                         android:drawablePadding="5dp"/>
-
                 </LinearLayout>
                 <TextView
                     android:textStyle="italic"
@@ -208,8 +189,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/userDetails"
-                    android:text="Loading..."
+                    android:layout_below="@id/userDetailsContainer"
                     />
                 <TextView
                     android:background="@drawable/yellow_square"
@@ -223,29 +203,24 @@
                     android:paddingBottom="3dp"
                     android:visibility="gone"
                     android:layout_marginStart="3dp"
-                    android:layout_marginLeft="3dp"
                     android:textColor="#000"
                     android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
                     android:layout_marginBottom="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/userDetails"
+                    android:layout_below="@id/userDetailsContainer"
                     android:layout_toEndOf="@id/txtCreated"
-                    android:layout_toRightOf="@id/txtCreated"
-                    android:text="admin"
+                    android:text="@string/admin"
                     />
                 <TextView
                     android:id="@+id/txtRepos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/txtCreated"
-                    android:text="0 Repos"
                     android:padding="10dp"
                     style="@style/Theme.GitHubCloner.Counter"
                     android:textStyle="bold"
                     android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginBottom="10dp"/>
                 <TextView
                     android:id="@+id/txtGists"
@@ -253,13 +228,10 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/txtCreated"
                     android:layout_toEndOf="@id/txtRepos"
-                    android:layout_toRightOf="@id/txtRepos"
-                    android:text="0 Gists"
                     android:padding="10dp"
                     style="@style/Theme.GitHubCloner.Counter"
                     android:textStyle="bold"
                     android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginBottom="10dp"/>
             </RelativeLayout>
 
@@ -268,26 +240,48 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginEnd="10dp"
-                android:id="@+id/lstRepos"
+                android:id="@+id/recyclerRepositories"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/profile"/>
+                android:layout_below="@id/profileContainer"/>
 
             <TextView
-                android:id="@+id/txtNoMoreRepos"
+                android:id="@+id/txtThatsAll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="10dp"
                 android:visibility="gone"
-                android:text="That's all!"
-                android:layout_below="@id/lstRepos"/>
-
+                android:text="@string/that_s_all"
+                android:layout_below="@id/recyclerRepositories"/>
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
+
     <ProgressBar
-        android:id="@+id/loadingMore"
+        android:id="@+id/pbLoading"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"/>
+
+    <RelativeLayout
+        android:id="@+id/rlLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/appBar">
+        <ImageView
+            android:id="@+id/imgOctocat"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:contentDescription="@string/octocat" />
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/imgOctocat"
+            android:text="@string/loading"/>
+    </RelativeLayout>
+
 </RelativeLayout>

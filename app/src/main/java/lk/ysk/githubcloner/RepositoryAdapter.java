@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +12,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.List;
 
-public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ViewHolder> {
+public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.ViewHolder> {
 
-    private final List<RepoModel> repos;
+    private final List<Repository> repos;
     private final LanguageColors colors;
     private final Context context;
     private final OnRepoClickedListener clickedListener;
@@ -75,7 +70,7 @@ public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ViewHolder> 
         }
     }
 
-    public ReposAdapter(Context context, List<RepoModel> repos, LanguageColors colors, OnRepoClickedListener clickedListener) {
+    public RepositoryAdapter(Context context, List<Repository> repos, LanguageColors colors, OnRepoClickedListener clickedListener) {
         this.repos = repos;
         this.colors = colors;
         this.context = context;
@@ -84,15 +79,15 @@ public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ViewHolder> 
 
     @NonNull
     @Override
-    public ReposAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RepositoryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.repos_list_item, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ReposAdapter.ViewHolder holder, int position) {
-        RepoModel repo = repos.get(position);
+    public void onBindViewHolder(@NonNull RepositoryAdapter.ViewHolder holder, int position) {
+        Repository repo = repos.get(position);
         holder.getTxtName().setText(repo.getName());
         holder.getTxtDescription().setText(repo.getDescription());
         holder.getTxtStars().setText(repo.getStarsString());
