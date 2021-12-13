@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -63,13 +64,15 @@ import lk.ysk.githubcloner.ReposAdapter;
 import lk.ysk.githubcloner.Repository;
 import lk.ysk.githubcloner.ui.widgets.SegmentProgressBar;
 
+import static androidx.core.content.FileProvider.getUriForFile;
+
 public class RepoActivity extends AppCompatActivity {
 
     private Repository repository;
     private FlexboxLayout gridLayout;
     private SegmentProgressBar segmentPb;
 
-    private File githubDir, cloneDir;
+    private File githubDir, cloneDir, tempDir;
     private Dialog dialogColning;
     private TextView txtFileName, txtClone;
     private TextView txtName, txtPercentage;
@@ -88,6 +91,11 @@ public class RepoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repo);
+
+        githubDir = new File(Environment.getExternalStorageDirectory(), "GitHub");
+        githubDir.mkdirs();
+
+        tempDir = new File(getFilesDir(), "temp");
 
         contentList = new ArrayList<>();
 
@@ -180,7 +188,11 @@ public class RepoActivity extends AppCompatActivity {
                     contentsAdapter.notifyDataSetChanged();
                     loadContents(content.getUrl(), true);
                 } else {
-
+                    if (tempDir.exists())
+                        tempDir.delete();
+                    tempDir.mkdirs();
+                    File file = new File(tempDir, content.getName());
+                    new DownloadArchive(content.getName(), true).execute(content.getDownloadUrl(), file.toString());
                 }
             }
         });
@@ -192,7 +204,6 @@ public class RepoActivity extends AppCompatActivity {
         contentList.clear();
         contentsAdapter.notifyDataSetChanged();
         String url = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
-        Log.d("YOHAN", "last: " + url);
         if (url.equals(repository.getContentsUrl().substring(0, repository.getContentsUrl().lastIndexOf('/'))))
             loadContents(url, false);
         else
@@ -243,9 +254,6 @@ public class RepoActivity extends AppCompatActivity {
     }
 
     private void cloneAsArchive(String url, String extention) {
-        githubDir = new File(Environment.getExternalStorageDirectory(), "GitHub");
-        githubDir.mkdirs();
-
         //findViewById(R.id.btnDownloadZip).setEnabled(false);
         String fname = repository.getName() + "-" + repository.getDefaultBranch() + extention;
         File file = new File(githubDir, fname);
@@ -257,7 +265,7 @@ public class RepoActivity extends AppCompatActivity {
 
             builder.setPositiveButton("YES", (dialog, which) -> {
                 file.delete();
-                new DownloadArchive(fname).execute(url, file.toString());
+                new DownloadArchive(fname, false).execute(url, file.toString());
                 dialog.dismiss();
             });
 
@@ -268,7 +276,7 @@ public class RepoActivity extends AppCompatActivity {
             AlertDialog alert = builder.create();
             alert.show();
         } else
-            new DownloadArchive(fname).execute(url, file.toString());
+            new DownloadArchive(fname, false).execute(url, file.toString());
     }
 
     private void loadLanguages() {
@@ -474,9 +482,11 @@ public class RepoActivity extends AppCompatActivity {
     class DownloadArchive extends AsyncTask<String, String, String> {
 
         private final String fileName;
+        private final boolean tempFile;
 
-        public DownloadArchive(String fileName) {
+        public DownloadArchive(String fileName, boolean tempFile) {
             this.fileName = fileName;
+            this.tempFile = tempFile;
         }
 
         /**
@@ -559,6 +569,13 @@ public class RepoActivity extends AppCompatActivity {
             pbDownload.setProgress(100);
             txtPercentage.setText("100%");
             dialogColning.dismiss();
+            if (tempFile) {
+                File file = new File(tempDir, fileName);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(getUriForFile(RepoActivity.this, "lk.ysk.githubcloner.fileprovider", file));
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                startActivity(intent);
+            }
         }
 
     }
