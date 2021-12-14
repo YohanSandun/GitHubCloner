@@ -29,7 +29,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import lk.ysk.githubcloner.LanguageColors;
 import lk.ysk.githubcloner.R;
 import lk.ysk.githubcloner.Repository;
-import lk.ysk.githubcloner.RepositoryAdapter;
+import lk.ysk.githubcloner.adapters.RepositoryAdapter;
 
 public class UserActivity extends AppCompatActivity {
 

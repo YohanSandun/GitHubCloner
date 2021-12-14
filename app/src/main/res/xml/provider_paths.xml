@@ -3,5 +3,5 @@
 <!--    <external-path name="temp" path="temp"/>-->
     <files-path
         name="temp"
-        path="temp/"/>
+        path=".temp/"/>
 </paths>

@@ -8,11 +8,11 @@ public class Content {
         GO_BACK
     }
 
-    private String name;
-    private Type type;
-    private String url;
-    private String downloadUrl;
-    private long size;
+    private final String name;
+    private final Type type;
+    private final String url;
+    private final String downloadUrl;
+    private final long size;
     private boolean selected;
 
     public Content(String name, Type type, String url, String downloadUrl, long size) {

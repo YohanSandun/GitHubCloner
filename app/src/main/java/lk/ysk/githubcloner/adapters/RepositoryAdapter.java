@@ -1,4 +1,4 @@
-package lk.ysk.githubcloner;
+package lk.ysk.githubcloner.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -13,6 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+
+import lk.ysk.githubcloner.LanguageColors;
+import lk.ysk.githubcloner.interfaces.OnRepoClickedListener;
+import lk.ysk.githubcloner.R;
+import lk.ysk.githubcloner.Repository;
 
 public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.ViewHolder> {
 

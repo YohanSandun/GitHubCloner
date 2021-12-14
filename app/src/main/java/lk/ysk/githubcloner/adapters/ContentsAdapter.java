@@ -1,4 +1,4 @@
-package lk.ysk.githubcloner;
+package lk.ysk.githubcloner.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+
+import lk.ysk.githubcloner.Content;
+import lk.ysk.githubcloner.interfaces.OnContentClickedListener;
+import lk.ysk.githubcloner.R;
 
 public class ContentsAdapter extends RecyclerView.Adapter<ContentsAdapter.ViewHolder> {
 
