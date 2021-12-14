@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.BranchesActivity">
+
+    <RelativeLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:elevation="5dp"
+        android:translationZ="4dp"
+        style="@style/Theme.GitHubCloner.AppBar">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:padding="3dp"
+            android:src="@drawable/ic_back"
+            android:clickable="true"
+            android:id="@+id/btnBack"
+            android:focusable="true" />
+
+        <TextView
+            style="@style/Theme.GitHubCloner.AppBar"
+            android:id="@+id/appBarText"
+            android:layout_toEndOf="@id/btnBack"
+            android:paddingStart="10dp"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Branches"/>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:padding="3dp"
+            android:clickable="true"
+            android:id="@+id/btnSettings"
+            android:focusable="true" />
+    </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScroll"
+        android:layout_below="@id/appBar"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvBranches"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/txtThatsAll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:visibility="gone"
+                android:text="@string/that_s_all"
+                android:layout_below="@id/rvBranches"/>
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

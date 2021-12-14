@@ -1,5 +1,9 @@
 package lk.ysk.githubcloner.ui;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
@@ -7,6 +11,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,6 +21,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -60,7 +66,7 @@ public class RepoActivity extends AppCompatActivity {
 
     private File githubDir, cloneDir, tempDir;
     private Dialog dlgCloning;
-    private TextView txtFileName, txtClone, txtName, txtPercentage;
+    private TextView txtFileName, txtClone, txtTitle, txtPercentage, txtBranch;
     private ProgressBar pbDownload, pbLoading;
 
     private final List<ContentFile> filesToDownload = new ArrayList<>();
@@ -72,6 +78,32 @@ public class RepoActivity extends AppCompatActivity {
     private RecyclerView rvContents;
     private ContentsAdapter contentsAdapter;
     private List<Content> contentList;
+    private String branch;
+
+    ActivityResultLauncher<Intent> branchesActivityLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // Here, no request code
+                        Intent data = result.getData();
+                        String newBranch = data.getStringExtra("branch");
+                        if (!branch.equals(newBranch)) {
+                            branch = newBranch;
+                            if (newBranch.length() > 20)
+                                txtBranch.setText(getString(R.string.default_branch) + ' ' + newBranch.substring(0,19)+"...");
+                            else
+                                txtBranch.setText(getString(R.string.default_branch) + ' ' + newBranch);
+                            requestCount = 0;
+                            currentIndex = 0;
+                            contentList.clear();
+                            filesToDownload.clear();
+                            loadContents(detailedRepository.getContentsUrl().substring(0, detailedRepository.getContentsUrl().lastIndexOf('/')), false);
+                        }
+                    }
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,27 +119,39 @@ public class RepoActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String repoUrl = intent.getStringExtra("url");
 
-        txtName = findViewById(R.id.appBarText);
+        txtTitle = findViewById(R.id.appBarText);
         languageContainer = findViewById(R.id.gridLanguages);
         pbLanguages = findViewById(R.id.segmentPb);
         rvContents = findViewById(R.id.rvContent);
         pbLoading = findViewById(R.id.pbLoading);
+        txtBranch = findViewById(R.id.txtBranch);
         TextView txtDescription = findViewById(R.id.txtDescription);
         TextView txtUpdated = findViewById(R.id.txtUpdated);
         TextView txtStars = findViewById(R.id.txtStars);
         TextView txtWatches = findViewById(R.id.txtWatches);
         TextView txtForks = findViewById(R.id.txtForks);
+        TextView txtName = findViewById(R.id.txtName);
 
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonObjectRequest repoRequest = new JsonObjectRequest(repoUrl, response -> {
             try {
                 detailedRepository = new DetailedRepository(response);
+                branch = detailedRepository.getDefaultBranch();
+                if (detailedRepository.getName().length() > 15)
+                    txtTitle.setText(detailedRepository.getName().substring(0, 14)+"...");
+                else
+                    txtTitle.setText(detailedRepository.getName());
                 txtName.setText(detailedRepository.getName());
                 txtDescription.setText(detailedRepository.getDescription());
                 txtUpdated.setText("Last Update " + detailedRepository.getUpdated());
                 txtStars.setText(detailedRepository.getStarsString());
                 txtWatches.setText(detailedRepository.getWatchesString());
                 txtForks.setText(detailedRepository.getForksString());
+                if (detailedRepository.getDefaultBranch().length() > 20)
+                    txtBranch.setText(getString(R.string.default_branch) + ' ' + detailedRepository.getDefaultBranch().substring(0, 19) + "...");
+                else
+                    txtBranch.setText(getString(R.string.default_branch) + ' ' + detailedRepository.getDefaultBranch());
+
                 loadLanguages();
                 loadContents(detailedRepository.getContentsUrl().substring(0, detailedRepository.getContentsUrl().lastIndexOf('/')), false);
             } catch (Exception ignore) {
@@ -130,11 +174,13 @@ public class RepoActivity extends AppCompatActivity {
 
         contentQueue = Volley.newRequestQueue(this);
 
-        findViewById(R.id.btnDownloadZip).setOnClickListener(view -> cloneAsArchive(repoUrl + "/zipball", ".zip"));
-        findViewById(R.id.btnDownloadTar).setOnClickListener(view -> cloneAsArchive(repoUrl + "/tarball", ".tar.gz"));
+        findViewById(R.id.btnDownloadZip).setOnClickListener(view -> cloneAsArchive(repoUrl + "/zipball/"+branch, ".zip"));
+        findViewById(R.id.btnDownloadTar).setOnClickListener(view -> cloneAsArchive(repoUrl + "/tarball/"+branch, ".tar.gz"));
 
         findViewById(R.id.btnDownloadSelected).setOnClickListener(view -> {
             filesToDownload.clear();
+            currentIndex = 0;
+            requestCount = 0;
 
             cloneDir = new File(githubDir, detailedRepository.getName());
             cloneDir.mkdirs();
@@ -158,7 +204,7 @@ public class RepoActivity extends AppCompatActivity {
 
             if (!dirFound && count > 0) {
                 pbDownload.setMax(filesToDownload.size());
-                new DownloadFileFromURL(filesToDownload.get(currentIndex).getFileName()).execute(filesToDownload.get(currentIndex).getUrl(), filesToDownload.get(currentIndex).getLocalFile());
+                new DownloadFileFromURL(filesToDownload.get(currentIndex).getFileName()).execute(filesToDownload.get(currentIndex).getUrl() + "?ref=" + branch, filesToDownload.get(currentIndex).getLocalFile());
             }
 
         });
@@ -182,6 +228,11 @@ public class RepoActivity extends AppCompatActivity {
         });
         rvContents.setAdapter(contentsAdapter);
 
+        findViewById(R.id.btnChange).setOnClickListener(v -> {
+            Intent branchesIntent = new Intent(RepoActivity.this, BranchesActivity.class);
+            branchesIntent.putExtra("url", detailedRepository.getBranchesUrl());
+            branchesActivityLauncher.launch(branchesIntent);
+        });
     }
 
     private void goBack() {
@@ -212,7 +263,7 @@ public class RepoActivity extends AppCompatActivity {
         if (goBackAvailable)
             contentList.add(new Content("..", Content.Type.GO_BACK, "", "", 0));
 
-        JsonArrayRequest reposRequest = new JsonArrayRequest(url, response -> {
+        JsonArrayRequest reposRequest = new JsonArrayRequest(url + "?ref=" + branch, response -> {
             try {
                 for (int i = 0; i < response.length(); i++) {
                     JSONObject file = response.getJSONObject(i);
@@ -235,7 +286,7 @@ public class RepoActivity extends AppCompatActivity {
     }
 
     private void cloneAsArchive(String url, String extension) {
-        String fname = detailedRepository.getName() + "-" + detailedRepository.getDefaultBranch() + extension;
+        String fname = detailedRepository.getName() + "-" + branch + extension;
         File file = new File(githubDir, fname);
 
         if (file.exists()) {
@@ -317,7 +368,7 @@ public class RepoActivity extends AppCompatActivity {
         if (!dir.exists())
             dir.mkdirs();
 
-        JsonArrayRequest reposRequest = new JsonArrayRequest(url, response -> {
+        JsonArrayRequest reposRequest = new JsonArrayRequest(url + "?ref=" + branch, response -> {
             try {
                 for (int i = 0; i < response.length(); i++) {
                     JSONObject file = response.getJSONObject(i);
@@ -347,7 +398,7 @@ public class RepoActivity extends AppCompatActivity {
                 txtClone.setText("Cloning...");
                 try {
                     pbDownload.setMax(filesToDownload.size());
-                    new DownloadFileFromURL(filesToDownload.get(currentIndex).getFileName()).execute(filesToDownload.get(currentIndex).getUrl(), filesToDownload.get(currentIndex).getLocalFile());
+                    new DownloadFileFromURL(filesToDownload.get(currentIndex).getFileName()).execute(filesToDownload.get(currentIndex).getUrl() + "?ref=" + branch, filesToDownload.get(currentIndex).getLocalFile());
                 } catch (Exception e) {
                     Toast.makeText(RepoActivity.this, "Error occurred while trying to fetch information!", Toast.LENGTH_LONG).show();
                     finish();

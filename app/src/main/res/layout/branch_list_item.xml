@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:focusable="true"
+    android:clickable="true"
+    android:foreground="@drawable/ripple_effect_repo"
+    style="@style/Theme.GitHubCloner.Repository"
+    android:padding="10dp"
+    >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtName"
+        android:text="Name"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+</RelativeLayout>

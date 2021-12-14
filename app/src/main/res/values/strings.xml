@@ -10,5 +10,7 @@
     <string name="selected">SELECTED</string>
     <string name="tar">TAR</string>
     <string name="zip">ZIP</string>
+    <string name="default_branch">Branch :</string>
+    <string name="change">Change</string>
     <!--    Icon by Raj Dev on freeicons.io-->
 </resources>
