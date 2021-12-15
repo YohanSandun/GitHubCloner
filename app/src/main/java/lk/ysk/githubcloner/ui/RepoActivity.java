@@ -18,6 +18,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -245,6 +246,21 @@ public class RepoActivity extends AppCompatActivity {
             Intent branchesIntent = new Intent(RepoActivity.this, BranchesActivity.class);
             branchesIntent.putExtra("url", detailedRepository.getBranchesUrl());
             branchesActivityLauncher.launch(branchesIntent);
+        });
+
+        findViewById(R.id.btnShare).setOnClickListener(v -> {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, detailedRepository.getGithubUrl());
+            sendIntent.setType("text/plain");
+
+            Intent shareIntent = Intent.createChooser(sendIntent, null);
+            startActivity(shareIntent);
+        });
+
+        findViewById(R.id.btnViewOnGitHub).setOnClickListener(v -> {
+            Intent webInt = new Intent(Intent.ACTION_VIEW, Uri.parse(detailedRepository.getGithubUrl()));
+            startActivity(webInt);
         });
     }
 

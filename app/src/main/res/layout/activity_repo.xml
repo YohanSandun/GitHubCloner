@@ -23,19 +23,35 @@
             android:src="@drawable/ic_back"
             android:clickable="true"
             android:id="@+id/btnBack"
-            android:focusable="true" />
+            android:focusable="true"
+            android:foreground="@drawable/ripple_effect_square"
+            android:contentDescription="@string/go_back" />
 
         <TextView
             style="@style/Theme.GitHubCloner.AppBar"
             android:id="@+id/appBarText"
             android:layout_toEndOf="@id/btnBack"
             android:paddingStart="10dp"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_toStartOf="@id/btnShare"
             android:text="@string/repositories"/>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_toStartOf="@id/btnSettings"
+            android:layout_marginEnd="10dp"
+            android:padding="3dp"
+            android:clickable="true"
+            android:src="@drawable/ic_share"
+            android:foreground="@drawable/ripple_effect_square"
+            android:id="@+id/btnShare"
+            android:focusable="true"
+            android:contentDescription="@string/share_this_repository" />
 
         <ImageView
             android:layout_width="30dp"
@@ -44,8 +60,11 @@
             android:layout_marginEnd="10dp"
             android:padding="3dp"
             android:clickable="true"
+            android:foreground="@drawable/ripple_effect_square"
+            android:src="@drawable/ic_more"
             android:id="@+id/btnSettings"
-            android:focusable="true" />
+            android:focusable="true"
+            android:contentDescription="@string/more" />
     </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -85,8 +104,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     android:layout_marginEnd="10dp"
@@ -109,12 +126,26 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/btnViewOnGitHub"
+                    android:layout_below="@id/llOwner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    style="@style/Theme.GitHubCloner.ViewOnGitHub"
+                    android:drawablePadding="2dp"
+                    android:text="@string/view_on"
+                    android:clickable="true"
+                    android:focusable="true"
+                    />
+
+                <TextView
                     android:id="@+id/txtDescription"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginTop="10dp"
-                    android:layout_below="@id/llOwner"
+                    android:layout_below="@id/btnViewOnGitHub"
                     android:layout_marginRight="10dp"
                     android:layout_width="match_parent"
                     android:layout_marginBottom="5dp"

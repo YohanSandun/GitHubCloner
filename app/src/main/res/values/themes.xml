@@ -38,4 +38,7 @@
         <item name="android:background">@drawable/download_bg</item>
         <item name="android:textColor">@color/black_dim</item>
     </style>
+    <style name="Theme.GitHubCloner.ViewOnGitHub" parent="Theme.GitHubCloner">
+        <item name="android:drawableEnd">@drawable/ic_github_dark</item>
+    </style>
 </resources>

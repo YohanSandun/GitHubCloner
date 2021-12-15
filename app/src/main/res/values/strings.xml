@@ -6,11 +6,14 @@
     <string name="octocat">Octocat</string>
     <string name="repositories">Repositories</string>
     <string name="settings">Settings</string>
-    <string name="go_back">Go Back</string>
     <string name="selected">SELECTED</string>
     <string name="tar">TAR</string>
     <string name="zip">ZIP</string>
     <string name="default_branch">Branch :</string>
     <string name="change">Change</string>
+    <string name="share_this_repository">Share this repository</string>
+    <string name="more">More</string>
+    <string name="go_back">Go Back</string>
+    <string name="view_on">View on</string>
     <!--    Icon by Raj Dev on freeicons.io-->
 </resources>
