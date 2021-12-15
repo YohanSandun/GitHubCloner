@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import lk.ysk.githubcloner.DetailedRepository;
 import lk.ysk.githubcloner.LanguageColors;
 import lk.ysk.githubcloner.R;
 import lk.ysk.githubcloner.Repository;
@@ -33,9 +34,7 @@ import lk.ysk.githubcloner.adapters.RepositoryAdapter;
 
 public class UserActivity extends AppCompatActivity {
 
-    public static LanguageColors languageColors;
-
-    private List<Repository> repositoriesList;
+    private List<DetailedRepository> repositoriesList;
     private int page = 1;
     private String userName;
     private RepositoryAdapter repositoryAdapter;
@@ -82,8 +81,7 @@ public class UserActivity extends AppCompatActivity {
         Glide.with(this).load(getDrawable(R.drawable.octocat_black)).into(imgOctocat);
 
         repositoriesList = new ArrayList<>();
-        languageColors = new LanguageColors(loadJSONFromAsset());
-        repositoryAdapter = new RepositoryAdapter(this, repositoriesList, languageColors, repo -> {
+        repositoryAdapter = new RepositoryAdapter(repositoriesList, repo -> {
             Intent repoIntent = new Intent(UserActivity.this, RepoActivity.class);
             repoIntent.putExtra("url", repo.getUrl());
             startActivity(repoIntent);
@@ -166,7 +164,7 @@ public class UserActivity extends AppCompatActivity {
             int i = 0;
             for (i = 0; i < response.length(); i++) {
                 try {
-                    repositoriesList.add(new Repository(response.getJSONObject(i)));
+                    repositoriesList.add(new DetailedRepository(response.getJSONObject(i)));
                 } catch (Exception ignore) {
                     Toast.makeText(UserActivity.this, "Error occurred while trying to fetch information!", Toast.LENGTH_LONG).show();
                     finish();
@@ -188,18 +186,5 @@ public class UserActivity extends AppCompatActivity {
         queue.add(reposRequest);
     }
 
-    public String loadJSONFromAsset() {
-        String json;
-        try {
-            InputStream is = getAssets().open("colors.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (Exception ignore) {
-            return null;
-        }
-        return json;
-    }
+
 }

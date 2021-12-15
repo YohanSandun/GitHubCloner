@@ -78,14 +78,37 @@
                     android:layout_width="match_parent"
                     android:layout_marginBottom="5dp"
                     android:layout_height="wrap_content"/>
+
+                <LinearLayout
+                    android:id="@+id/llOwner"
+                    android:layout_below="@id/txtName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:id="@+id/imgAvatar"/>
+
+                    <TextView
+                        android:id="@+id/txtOwner"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="10dp"/>
+                    
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/txtDescription"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginTop="10dp"
-                    android:layout_below="@id/txtName"
-                    android:textStyle="bold"
+                    android:layout_below="@id/llOwner"
                     android:layout_marginRight="10dp"
                     android:layout_width="match_parent"
                     android:layout_marginBottom="5dp"
@@ -104,39 +127,8 @@
                     android:layout_below="@id/txtDescription"/>
 
                 <TextView
-                    android:id="@+id/txtBranch"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/txtUpdated"
-                    android:text="@string/default_branch"/>
-
-                <TextView
-                    android:id="@+id/btnChange"
-                    android:focusable="true"
-                    android:clickable="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:paddingBottom="2dp"
-                    android:paddingTop="2dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/txtUpdated"
-                    android:layout_toEndOf="@id/txtBranch"
-                    style="@style/Theme.GitHubCloner.Counter"
-                    android:text="@string/change"/>
-
-                <TextView
                     android:id="@+id/txtStars"
-                    android:layout_below="@id/btnChange"
+                    android:layout_below="@id/txtUpdated"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -146,7 +138,7 @@
                 <TextView
                     android:layout_marginStart="10dp"
                     android:id="@+id/txtWatches"
-                    android:layout_below="@id/btnChange"
+                    android:layout_below="@id/txtUpdated"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_watch"
@@ -156,7 +148,7 @@
                 <TextView
                     android:layout_marginStart="10dp"
                     android:id="@+id/txtForks"
-                    android:layout_below="@id/btnChange"
+                    android:layout_below="@id/txtUpdated"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_forks"
@@ -186,11 +178,48 @@
 
             </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_below="@id/details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Theme.GitHubCloner.Repository"
+                android:id="@+id/rlBranchContainer">
+
+                <TextView
+                    android:id="@+id/txtBranch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:layout_toStartOf="@id/btnChange"
+                    android:layout_alignParentStart="true"
+                    android:textSize="15sp"/>
+
+                <TextView
+                    android:id="@+id/btnChange"
+                    android:layout_alignParentEnd="true"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:layout_marginEnd="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    style="@style/Theme.GitHubCloner.Counter"
+                    android:text="@string/change"/>
+
+            </RelativeLayout>
+
             <LinearLayout
                 android:id="@+id/llButtonContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/details"
+                android:layout_below="@id/rlBranchContainer"
                 android:layout_marginStart="10dp"
                 android:orientation="horizontal"
                 >

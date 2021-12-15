@@ -33,6 +33,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.android.flexbox.FlexboxLayout;
 
 import org.json.JSONObject;
@@ -48,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import lk.ysk.githubcloner.Content;
 import lk.ysk.githubcloner.ContentFile;
 import lk.ysk.githubcloner.adapters.ContentsAdapter;
@@ -131,11 +133,15 @@ public class RepoActivity extends AppCompatActivity {
         TextView txtWatches = findViewById(R.id.txtWatches);
         TextView txtForks = findViewById(R.id.txtForks);
         TextView txtName = findViewById(R.id.txtName);
+        TextView txtOwner = findViewById(R.id.txtOwner);
+        CircleImageView imgAvatar = findViewById(R.id.imgAvatar);
 
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonObjectRequest repoRequest = new JsonObjectRequest(repoUrl, response -> {
             try {
                 detailedRepository = new DetailedRepository(response);
+                txtOwner.setText(detailedRepository.getOwner());
+                Glide.with(this).load(detailedRepository.getAvatarUrl()).into(imgAvatar);
                 branch = detailedRepository.getDefaultBranch();
                 if (detailedRepository.getName().length() > 15)
                     txtTitle.setText(detailedRepository.getName().substring(0, 14)+"...");
@@ -263,6 +269,9 @@ public class RepoActivity extends AppCompatActivity {
         if (goBackAvailable)
             contentList.add(new Content("..", Content.Type.GO_BACK, "", "", 0));
 
+        if (url.contains("?ref"))
+            url = url.substring(0, url.lastIndexOf("?ref"));
+
         JsonArrayRequest reposRequest = new JsonArrayRequest(url + "?ref=" + branch, response -> {
             try {
                 for (int i = 0; i < response.length(); i++) {
@@ -272,6 +281,7 @@ public class RepoActivity extends AppCompatActivity {
                     contentList.add(new Content(fname, type, file.getString("url"), file.getString("download_url"), file.getLong("size")));
                 }
             } catch (Exception ignore) {
+
                 Toast.makeText(RepoActivity.this, "Error occurred while trying to fetch information!", Toast.LENGTH_LONG).show();
                 finish();
             }
@@ -279,6 +289,7 @@ public class RepoActivity extends AppCompatActivity {
             rvContents.setVisibility(View.VISIBLE);
             pbLoading.setVisibility(View.GONE);
         }, error -> {
+
             Toast.makeText(RepoActivity.this, "Error occurred while trying to fetch information!", Toast.LENGTH_LONG).show();
             finish();
         });
@@ -338,7 +349,7 @@ public class RepoActivity extends AppCompatActivity {
                     txtLang.setLayoutParams(lp);
                     float percentage = (float) ((double) language.second / total);
                     txtLang.setText(String.format("%s %.1f%%", language.first, percentage * 100f));
-                    int color = UserActivity.languageColors.getColor(language.first);
+                    int color = MainActivity.languageColors.getColor(language.first);
                     if (color != Color.TRANSPARENT) {
                         Drawable drawable = RepoActivity.this.getDrawable(R.drawable.white_square);
                         drawable.setColorFilter(color, PorterDuff.Mode.MULTIPLY);

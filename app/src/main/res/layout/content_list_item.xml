@@ -23,16 +23,17 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@id/imgIcon"
-        android:gravity="center"
-        android:layout_toRightOf="@id/imgIcon">
+        android:layout_toStartOf="@id/chkSelect">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txtName"
             android:text="File name"
             android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:layout_alignParentStart="true"/>
         <TextView
+            android:layout_alignParentStart="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txtSize"

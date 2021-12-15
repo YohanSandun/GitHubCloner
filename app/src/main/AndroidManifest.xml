@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GitHubCloner">
-        <activity android:name=".ui.BranchesActivity"></activity>
+        <activity android:name=".ui.SearchActivity"></activity>
+        <activity android:name=".ui.BranchesActivity" />
         <activity android:name=".ui.RepoActivity" />
         <activity android:name=".ui.UserActivity" />
         <activity android:name=".ui.MainActivity">

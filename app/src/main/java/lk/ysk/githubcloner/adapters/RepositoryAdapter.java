@@ -14,17 +14,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import lk.ysk.githubcloner.DetailedRepository;
 import lk.ysk.githubcloner.LanguageColors;
 import lk.ysk.githubcloner.interfaces.OnRepoClickedListener;
 import lk.ysk.githubcloner.R;
 import lk.ysk.githubcloner.Repository;
+import lk.ysk.githubcloner.ui.MainActivity;
 
 public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.ViewHolder> {
 
-    private final List<Repository> repos;
-    private final LanguageColors colors;
-    private final Context context;
+    private final List<DetailedRepository> repos;
     private final OnRepoClickedListener clickedListener;
+    private boolean needOwnerName;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView txtName, txtDescription,txtStars,txtWatches,txtUpdate, txtLanguage, txtForks;
@@ -75,11 +76,13 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Vi
         }
     }
 
-    public RepositoryAdapter(Context context, List<Repository> repos, LanguageColors colors, OnRepoClickedListener clickedListener) {
+    public RepositoryAdapter(List<DetailedRepository> repos, OnRepoClickedListener clickedListener) {
         this.repos = repos;
-        this.colors = colors;
-        this.context = context;
         this.clickedListener = clickedListener;
+    }
+
+    public void setNeedOwnerName(boolean needOwnerName) {
+        this.needOwnerName = needOwnerName;
     }
 
     @NonNull
@@ -92,9 +95,9 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull RepositoryAdapter.ViewHolder holder, int position) {
-        Repository repo = repos.get(position);
+        DetailedRepository repo = repos.get(position);
         holder.getTxtName().setText(repo.getName());
-        holder.getTxtDescription().setText(repo.getDescription());
+        holder.getTxtDescription().setText(needOwnerName ? "By " + repo.getOwner() + "\r\n\r\n" + repo.getDescription() : repo.getDescription());
         holder.getTxtStars().setText(repo.getStarsString());
         holder.getTxtWatches().setText(repo.getWatchesString());
         holder.getTxtUpdate().setText(String.format("Updated %s", repo.getUpdated()));
@@ -103,9 +106,9 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Vi
             holder.getTxtLanguage().setVisibility(View.GONE);
         else {
             holder.getTxtLanguage().setText(repo.getLanguage());
-            int color = colors.getColor(repo.getLanguage());
+            int color = MainActivity.languageColors.getColor(repo.getLanguage());
             if (color != Color.TRANSPARENT) {
-                Drawable drawable = context.getDrawable(R.drawable.white_square);
+                Drawable drawable = holder.baseView.getContext().getDrawable(R.drawable.white_square);
                 drawable.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
                 holder.getTxtLanguage().setBackground(drawable);
                 holder.getTxtLanguage().setTextColor(isBrightColor(color) ? Color.BLACK : Color.WHITE);

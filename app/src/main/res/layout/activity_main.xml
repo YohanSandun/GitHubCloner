@@ -4,22 +4,98 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MainActivity">
+    tools:context=".ui.MainActivity"
+    >
 
-    <EditText
-        android:id="@+id/txtUser"
+    <RelativeLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:elevation="5dp"
+        android:translationZ="4dp"
+        style="@style/Theme.GitHubCloner.AppBar">
+
+        <TextView
+            style="@style/Theme.GitHubCloner.AppBar"
+            android:id="@+id/appBarText"
+            android:paddingStart="20dp"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="GitHub Cloner"/>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:padding="3dp"
+            android:clickable="true"
+            android:id="@+id/btnSettings"
+            android:focusable="true"
+            android:contentDescription="@string/settings" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:hint="GitHub Username"/>
+        android:padding="10dp"
+        android:layout_centerInParent="true">
+        <EditText
+            android:id="@+id/txtSearch"
+            android:background="@drawable/repo_bg"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="5dp"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="User or Repository"/>
 
-    <Button
-        android:id="@+id/btnLoad"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtUser"
-        android:layout_margin="10dp"
-        android:text="Load"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtSearch"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/btnSearchUsers"
+                android:background="@drawable/search_btn_bg"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:layout_marginEnd="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="Users" />
+
+            <TextView
+                android:id="@+id/btnSearchRepos"
+                android:background="@drawable/search_btn_bg"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="Repositories" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+
+
 
 
 </RelativeLayout>

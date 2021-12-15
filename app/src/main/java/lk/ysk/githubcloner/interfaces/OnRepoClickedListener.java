@@ -1,7 +1,7 @@
 package lk.ysk.githubcloner.interfaces;
 
-import lk.ysk.githubcloner.Repository;
+import lk.ysk.githubcloner.DetailedRepository;
 
 public interface OnRepoClickedListener {
-    void OnClick(Repository repo);
+    void OnClick(DetailedRepository repo);
 }
