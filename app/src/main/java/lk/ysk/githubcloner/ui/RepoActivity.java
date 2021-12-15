@@ -136,6 +136,13 @@ public class RepoActivity extends AppCompatActivity {
         TextView txtOwner = findViewById(R.id.txtOwner);
         CircleImageView imgAvatar = findViewById(R.id.imgAvatar);
 
+        findViewById(R.id.llOwner).setOnClickListener(v -> {
+            Intent userIntent = new Intent(RepoActivity.this, UserActivity.class);
+            userIntent.putExtra("user", detailedRepository.getOwner());
+            startActivity(userIntent);
+            finish();
+        });
+
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonObjectRequest repoRequest = new JsonObjectRequest(repoUrl, response -> {
             try {

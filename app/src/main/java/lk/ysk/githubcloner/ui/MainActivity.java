@@ -33,9 +33,13 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnSearchUsers).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, UserActivity.class);
-                intent.putExtra("user", txtTerm.getText().toString());
-                startActivity(intent);
+                String term = parseQuery(txtTerm.getText().toString());
+                if (!term.equals("")) {
+                    Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                    intent.putExtra("term", term);
+                    intent.putExtra("type", "user");
+                    startActivity(intent);
+                }
             }
         });
 

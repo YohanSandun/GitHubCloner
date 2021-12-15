@@ -29,7 +29,9 @@ import java.util.List;
 import lk.ysk.githubcloner.DetailedRepository;
 import lk.ysk.githubcloner.R;
 import lk.ysk.githubcloner.Repository;
+import lk.ysk.githubcloner.User;
 import lk.ysk.githubcloner.adapters.RepositoryAdapter;
+import lk.ysk.githubcloner.adapters.UsersAdapter;
 import lk.ysk.githubcloner.interfaces.OnRepoClickedListener;
 
 public class SearchActivity extends AppCompatActivity {
@@ -37,6 +39,8 @@ public class SearchActivity extends AppCompatActivity {
     private String type, term;
     private RepositoryAdapter repositoryAdapter;
     private List<DetailedRepository> repositoryList;
+    private UsersAdapter usersAdapter;
+    private List<User> userList;
 
     private int page = 1;
     private boolean noMoreResults;
@@ -70,13 +74,10 @@ public class SearchActivity extends AppCompatActivity {
 
         if (type.equals("repo")) {
             repositoryList = new ArrayList<>();
-            repositoryAdapter = new RepositoryAdapter(repositoryList, new OnRepoClickedListener() {
-                @Override
-                public void OnClick(DetailedRepository repo) {
-                    Intent repoIntent = new Intent(SearchActivity.this, RepoActivity.class);
-                    repoIntent.putExtra("url", repo.getUrl());
-                    startActivity(repoIntent);
-                }
+            repositoryAdapter = new RepositoryAdapter(repositoryList, repo -> {
+                Intent repoIntent = new Intent(SearchActivity.this, RepoActivity.class);
+                repoIntent.putExtra("url", repo.getUrl());
+                startActivity(repoIntent);
             });
             repositoryAdapter.setNeedOwnerName(true);
 
@@ -94,6 +95,29 @@ public class SearchActivity extends AppCompatActivity {
             });
             loadRepositories();
         }
+        else if (type.equals("user")) {
+            userList = new ArrayList<>();
+            usersAdapter = new UsersAdapter(userList, user -> {
+                Intent userIntent = new Intent(SearchActivity.this, UserActivity.class);
+                userIntent.putExtra("user", user.getLogin());
+                startActivity(userIntent);
+            });
+
+            rvResults.setAdapter(usersAdapter);
+            nestedScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+                if (noMoreResults) {
+                    pbLoading.setVisibility(View.GONE);
+                    return;
+                }
+                if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
+                    page++;
+                    pbLoading.setVisibility(View.VISIBLE);
+                    loadUsers();
+                }
+            });
+            loadUsers();
+        }
+
     }
 
     private void loadRepositories() {
@@ -113,6 +137,36 @@ public class SearchActivity extends AppCompatActivity {
                     txtThatsAll.setVisibility(View.VISIBLE);
                 }
                 repositoryAdapter.notifyDataSetChanged();
+                pbLoading.setVisibility(View.GONE);
+                rlLoading.setVisibility(View.GONE);
+                nestedScrollView.setVisibility(View.VISIBLE);
+            } catch (Exception ignore) {
+
+            }
+        }, error -> {
+
+        });
+
+        queue.add(reposRequest);
+    }
+
+    private void loadUsers() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String urlRepos = "https://api.github.com/search/users?q="+term+"&per_page=30&page=" + page;
+
+        JsonObjectRequest reposRequest = new JsonObjectRequest(urlRepos, response -> {
+            try {
+                txtTotalResults.setText(String.format("About %d results", response.getLong("total_count")));
+                JSONArray results = response.getJSONArray("items");
+                int i;
+                for (i = 0; i < results.length(); i++)
+                    userList.add(new User(results.getJSONObject(i)));
+
+                if (i == 0 || (page == 1 && i < 30)){
+                    noMoreResults = true;
+                    txtThatsAll.setVisibility(View.VISIBLE);
+                }
+                usersAdapter.notifyDataSetChanged();
                 pbLoading.setVisibility(View.GONE);
                 rlLoading.setVisibility(View.GONE);
                 nestedScrollView.setVisibility(View.VISIBLE);

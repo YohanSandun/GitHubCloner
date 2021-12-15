@@ -44,4 +44,5 @@ public class DetailedRepository extends Repository {
     public String getAvatarUrl() {
         return avatarUrl;
     }
+
 }
