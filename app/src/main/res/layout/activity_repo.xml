@@ -37,8 +37,21 @@
             android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_toStartOf="@id/btnShare"
+            android:layout_toStartOf="@id/btnAddToFav"
             android:text="@string/repositories"/>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_toStartOf="@id/btnShare"
+            android:layout_marginEnd="10dp"
+            android:padding="3dp"
+            android:clickable="true"
+            android:src="@drawable/ic_star_outline"
+            android:foreground="@drawable/ripple_effect_square"
+            android:id="@+id/btnAddToFav"
+            android:focusable="true"
+            android:contentDescription="@string/add_to_favourites" />
 
         <ImageView
             android:layout_width="30dp"

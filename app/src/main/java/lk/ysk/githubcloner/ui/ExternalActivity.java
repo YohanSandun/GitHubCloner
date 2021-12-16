@@ -15,7 +15,8 @@ public class ExternalActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_external);
-        // ATTENTION: This was auto-generated to handle app links.
+
+        MainActivity.loadStaticStuff(this);
 
         Intent appLinkIntent = getIntent();
         Uri appLinkData = appLinkIntent.getData();
@@ -27,23 +28,21 @@ public class ExternalActivity extends AppCompatActivity {
                 intent.putExtra("url", "https://api.github.com/repos/" + data[1].trim() + "/" + data[2].trim());
                 startActivity(intent);
                 finish();
-                return;
             } else {
                 Intent intent = new Intent(ExternalActivity.this, UserActivity.class);
                 intent.putExtra("user", data[1].trim());
                 startActivity(intent);
                 finish();
-                return;
             }
         } else if (data.length == 2) {
             Intent intent = new Intent(ExternalActivity.this, UserActivity.class);
             intent.putExtra("user", data[1].trim());
             startActivity(intent);
             finish();
-            return;
+        } else {
+            Intent intent = new Intent(ExternalActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         }
-        Intent intent = new Intent(ExternalActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
     }
 }

@@ -15,5 +15,9 @@
     <string name="more">More</string>
     <string name="go_back">Go Back</string>
     <string name="view_on">View on</string>
+    <string name="user_or_repository">User or Repository</string>
+    <string name="users">Users</string>
+    <string name="add_to_favourites">Add to favourites</string>
+    <string name="no_favourites">No Favourites</string>
     <!--    Icon by Raj Dev on freeicons.io-->
 </resources>

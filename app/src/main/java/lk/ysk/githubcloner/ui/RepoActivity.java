@@ -25,6 +25,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -53,6 +54,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import lk.ysk.githubcloner.Content;
 import lk.ysk.githubcloner.ContentFile;
+import lk.ysk.githubcloner.FavouriteItem;
 import lk.ysk.githubcloner.adapters.ContentsAdapter;
 import lk.ysk.githubcloner.R;
 import lk.ysk.githubcloner.adapters.RepositoryAdapter;
@@ -83,7 +85,7 @@ public class RepoActivity extends AppCompatActivity {
     private List<Content> contentList;
     private String branch;
 
-    ActivityResultLauncher<Intent> branchesActivityLauncher = registerForActivityResult(
+    private ActivityResultLauncher<Intent> branchesActivityLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
@@ -107,6 +109,8 @@ public class RepoActivity extends AppCompatActivity {
                     }
                 }
             });
+
+    private boolean isFavourite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +140,21 @@ public class RepoActivity extends AppCompatActivity {
         TextView txtName = findViewById(R.id.txtName);
         TextView txtOwner = findViewById(R.id.txtOwner);
         CircleImageView imgAvatar = findViewById(R.id.imgAvatar);
+        ImageView imgFavourite = findViewById(R.id.btnAddToFav);
+
+        imgFavourite.setOnClickListener(v -> {
+            if (!isFavourite) {
+                MainActivity.favourites.addFavourite(new FavouriteItem(detailedRepository));
+                MainActivity.saveFavourites();
+                isFavourite = true;
+                imgFavourite.setImageResource(R.drawable.ic_star_filled);
+            } else {
+                MainActivity.favourites.removeFavourite(detailedRepository.getName(), detailedRepository.getOwner());
+                MainActivity.saveFavourites();
+                isFavourite = false;
+                imgFavourite.setImageResource(R.drawable.ic_star_outline);
+            }
+        });
 
         findViewById(R.id.llOwner).setOnClickListener(v -> {
             Intent userIntent = new Intent(RepoActivity.this, UserActivity.class);
@@ -165,6 +184,11 @@ public class RepoActivity extends AppCompatActivity {
                     txtBranch.setText(getString(R.string.default_branch) + ' ' + detailedRepository.getDefaultBranch().substring(0, 19) + "...");
                 else
                     txtBranch.setText(getString(R.string.default_branch) + ' ' + detailedRepository.getDefaultBranch());
+
+                if (MainActivity.favourites.isAvailable(detailedRepository.getName(), detailedRepository.getOwner())) {
+                    isFavourite = true;
+                    imgFavourite.setImageResource(R.drawable.ic_star_filled);
+                }
 
                 loadLanguages();
                 loadContents(detailedRepository.getContentsUrl().substring(0, detailedRepository.getContentsUrl().lastIndexOf('/')), false);
@@ -262,6 +286,8 @@ public class RepoActivity extends AppCompatActivity {
             Intent webInt = new Intent(Intent.ACTION_VIEW, Uri.parse(detailedRepository.getGithubUrl()));
             startActivity(webInt);
         });
+
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
     }
 
     private void goBack() {

@@ -39,14 +39,26 @@
 
     </RelativeLayout>
 
+    <ImageView
+        android:layout_marginTop="20dp"
+        android:id="@+id/imgGitHub"
+        android:layout_below="@id/appBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Theme.GitHubCloner.GitHubMark"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"/>
+
     <RelativeLayout
+        android:layout_below="@id/imgGitHub"
+        android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_centerInParent="true">
+        android:padding="10dp">
+
         <EditText
             android:id="@+id/txtSearch"
-            android:background="@drawable/repo_bg"
+            style="@style/Theme.GitHubCloner.Repository"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"
             android:drawableStart="@drawable/ic_search"
@@ -54,7 +66,9 @@
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="User or Repository"/>
+            android:hint="@string/user_or_repository"
+            android:importantForAutofill="no"
+            android:inputType="text" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -75,7 +89,9 @@
                 android:paddingBottom="10dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:text="Users" />
+                android:text="@string/users"
+                android:drawableEnd="@drawable/ic_arrow"
+                android:padding="10dp"/>
 
             <TextView
                 android:id="@+id/btnSearchRepos"
@@ -89,13 +105,31 @@
                 android:paddingBottom="10dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:text="Repositories" />
-
+                android:text="@string/repositories"
+                android:drawableEnd="@drawable/ic_arrow"
+                android:padding="10dp"/>
         </LinearLayout>
+
     </RelativeLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/mainContainer"
+        android:layout_margin="10dp"
+        android:id="@+id/lstFavorites"
+        style="@style/Theme.GitHubCloner.Repository"
+        android:padding="10dp"
+        />
 
-
-
-
+    <TextView
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_below="@id/mainContainer"
+        android:layout_margin="10dp"
+        android:id="@+id/txtFavourites"
+        android:text="@string/no_favourites"
+        android:padding="10dp"/>
 </RelativeLayout>

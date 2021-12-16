@@ -3,31 +3,32 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="10dp"
-    android:layout_margin="10dp"
+    android:layout_marginBottom="10dp"
     android:focusable="true"
     android:clickable="true"
+    android:padding="10dp"
     android:foreground="@drawable/ripple_effect_repo"
+    style="@style/Theme.GitHubCloner.Profile"
     >
 
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="wrap_content"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_centerVertical="true"
-        android:id="@+id/imgIcon"
+        android:id="@+id/imgAvatar"
         android:layout_marginEnd="5dp"/>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toEndOf="@id/imgIcon"
-        android:layout_toStartOf="@id/chkSelect">
+        android:layout_toEndOf="@id/imgAvatar"
+        android:layout_alignParentEnd="true">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txtName"
-            android:text="File name"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_alignParentStart="true"/>
@@ -35,16 +36,9 @@
             android:layout_alignParentStart="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/txtSize"
-            android:text="0KB"
+            android:id="@+id/txtOwner"
             android:layout_below="@id/txtName"/>
-    </RelativeLayout>
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:id="@+id/chkSelect"/>
+    </RelativeLayout>
 
 </RelativeLayout>

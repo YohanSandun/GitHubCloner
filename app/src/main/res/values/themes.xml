@@ -41,4 +41,7 @@
     <style name="Theme.GitHubCloner.ViewOnGitHub" parent="Theme.GitHubCloner">
         <item name="android:drawableEnd">@drawable/ic_github_dark</item>
     </style>
+    <style name="Theme.GitHubCloner.GitHubMark" parent="Theme.GitHubCloner">
+        <item name="android:src">@drawable/github_mark_dark</item>
+    </style>
 </resources>
