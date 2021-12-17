@@ -7,32 +7,21 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.Manifest;
-import android.app.Dialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.obsez.android.lib.filechooser.ChooserDialog;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -211,9 +200,6 @@ public class MainActivity extends AppCompatActivity {
         lstFavs.setAdapter(favouritesAdapter);
         refreshFavouritesText();
 
-        ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE },
-                23);
-
         EditText txtTerm = findViewById(R.id.txtSearch);
 
         findViewById(R.id.btnSearchUsers).setOnClickListener(view -> {
@@ -223,7 +209,8 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("term", term);
                 intent.putExtra("type", "user");
                 searchActivityLauncher.launch(intent);
-            }
+            } else
+                Toast.makeText(MainActivity.this, "Enter search query first!", Toast.LENGTH_LONG).show();
         });
 
         findViewById(R.id.btnSearchRepos).setOnClickListener(v -> {
@@ -233,7 +220,8 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("term", term);
                 intent.putExtra("type", "repo");
                 searchActivityLauncher.launch(intent);
-            }
+            } else
+                Toast.makeText(MainActivity.this, "Enter search query first!", Toast.LENGTH_LONG).show();
         });
 
         findViewById(R.id.btnSettings).setOnClickListener(view -> MenuHelper.showSettingsMenu(this, view, searchActivityLauncher));

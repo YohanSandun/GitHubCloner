@@ -23,30 +23,6 @@ public class Repository {
         }
     }
 
-    public int getStars() {
-        return stars;
-    }
-
-    public void setStars(int stars) {
-        this.stars = stars;
-    }
-
-    public int getForks() {
-        return forks;
-    }
-
-    public void setForks(int forks) {
-        this.forks = forks;
-    }
-
-    public int getWatches() {
-        return watches;
-    }
-
-    public void setWatches(int watches) {
-        this.watches = watches;
-    }
-
     public String getName() {
         return name;
     }
@@ -59,24 +35,12 @@ public class Repository {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getUpdated() {
         return updated;
     }
 
-    public void setUpdated(String updated) {
-        this.updated = updated;
-    }
-
     public String getLanguage() {
         return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
     }
 
     public String getUrl() {

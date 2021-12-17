@@ -3,6 +3,7 @@
     <string name="version">V 1.0.0</string>
     <string name="privacy_policy">https://privacy.akurukb.com/github_cloner.html</string>
 
+    <string name="error_no_data">Error occurred while trying to fetch information!</string>
     <string name="admin">admin</string>
     <string name="that_s_all">That\'s all!</string>
     <string name="loading">Loading</string>

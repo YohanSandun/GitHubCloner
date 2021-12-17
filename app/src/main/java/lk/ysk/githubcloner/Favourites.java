@@ -11,10 +11,6 @@ public class Favourites {
         repositories.add(url);
     }
 
-    public void removeFavouriteAt(int i) {
-        repositories.remove(i);
-    }
-
     public List<FavouriteItem> getFavourites() {
         return repositories;
     }

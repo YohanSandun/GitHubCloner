@@ -6,14 +6,18 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.util.Pair;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -22,7 +26,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -195,11 +198,11 @@ public class RepoActivity extends AppCompatActivity {
                 loadLanguages();
                 loadContents(detailedRepository.getContentsUrl().substring(0, detailedRepository.getContentsUrl().lastIndexOf('/')), false);
             } catch (Exception ignore) {
-                Toast.makeText(RepoActivity.this, "Error occurred while trying to fetch information!", Toast.LENGTH_LONG).show();
+                Toast.makeText(RepoActivity.this, getString(R.string.error_no_data), Toast.LENGTH_LONG).show();
                 finish();
             }
         }, error -> {
-            Toast.makeText(RepoActivity.this, "Error occurred while trying to fetch information!", Toast.LENGTH_LONG).show();
+            Toast.makeText(RepoActivity.this, getString(R.string.error_no_data), Toast.LENGTH_LONG).show();
             finish();
         });
         queue.add(repoRequest);
@@ -218,6 +221,9 @@ public class RepoActivity extends AppCompatActivity {
         findViewById(R.id.btnDownloadTar).setOnClickListener(view -> cloneAsArchive(repoUrl + "/tarball/"+branch, ".tar.gz"));
 
         findViewById(R.id.btnDownloadSelected).setOnClickListener(view -> {
+            if (!checkPermissions())
+                return;
+
             filesToDownload.clear();
             currentIndex = 0;
             requestCount = 0;
@@ -246,6 +252,9 @@ public class RepoActivity extends AppCompatActivity {
                 pbDownload.setMax(filesToDownload.size());
                 new DownloadFileFromURL(filesToDownload.get(currentIndex).getFileName()).execute(filesToDownload.get(currentIndex).getUrl() + "?ref=" + branch, filesToDownload.get(currentIndex).getLocalFile());
             }
+
+            if (count == 0)
+                Toast.makeText(RepoActivity.this, "Select items you want to download!", Toast.LENGTH_LONG).show();
 
         });
 
@@ -339,7 +348,7 @@ public class RepoActivity extends AppCompatActivity {
                 }
             } catch (Exception ignore) {
 
-                Toast.makeText(RepoActivity.this, "Error occurred while trying to fetch information!", Toast.LENGTH_LONG).show();
+                Toast.makeText(RepoActivity.this, getString(R.string.error_no_data), Toast.LENGTH_LONG).show();
                 finish();
             }
             contentsAdapter.notifyDataSetChanged();
@@ -347,13 +356,43 @@ public class RepoActivity extends AppCompatActivity {
             pbLoading.setVisibility(View.GONE);
         }, error -> {
 
-            Toast.makeText(RepoActivity.this, "Error occurred while trying to fetch information!", Toast.LENGTH_LONG).show();
+            Toast.makeText(RepoActivity.this, getString(R.string.error_no_data), Toast.LENGTH_LONG).show();
             finish();
         });
         contentQueue.add(reposRequest);
     }
 
+    private boolean checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+            if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(RepoActivity.this);
+
+                builder.setTitle("Permissions");
+                builder.setMessage("You need to grant read and write permissions for external storage to clone repositories.");
+
+                builder.setPositiveButton("OK", (dialog, which) -> {
+                    ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                            23);
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                        23);
+            }
+            return false;
+        }
+        return true;
+    }
+
     private void cloneAsArchive(String url, String extension) {
+
+        if (!checkPermissions())
+            return;
+
         String fname = detailedRepository.getName() + "-" + branch + extension;
         File file = new File(githubDir, fname);
 
@@ -422,11 +461,11 @@ public class RepoActivity extends AppCompatActivity {
                 }
                 }
             } catch (Exception ignore) {
-                Toast.makeText(RepoActivity.this, "Error occurred while trying to fetch information!", Toast.LENGTH_LONG).show();
+                Toast.makeText(RepoActivity.this, getString(R.string.error_no_data), Toast.LENGTH_LONG).show();
                 finish();
             }
         }, error -> {
-            Toast.makeText(RepoActivity.this, "Error occurred while trying to fetch information!", Toast.LENGTH_LONG).show();
+            Toast.makeText(RepoActivity.this, getString(R.string.error_no_data), Toast.LENGTH_LONG).show();
             finish();
         });
         queue.add(langsRequest);
@@ -458,7 +497,7 @@ public class RepoActivity extends AppCompatActivity {
 
                 }
             } catch (Exception error) {
-                Toast.makeText(RepoActivity.this, "Error occurred while trying to fetch information!", Toast.LENGTH_LONG).show();
+                Toast.makeText(RepoActivity.this, getString(R.string.error_no_data), Toast.LENGTH_LONG).show();
                 finish();
             }
             requestCount--;
@@ -468,12 +507,12 @@ public class RepoActivity extends AppCompatActivity {
                     pbDownload.setMax(filesToDownload.size());
                     new DownloadFileFromURL(filesToDownload.get(currentIndex).getFileName()).execute(filesToDownload.get(currentIndex).getUrl() + "?ref=" + branch, filesToDownload.get(currentIndex).getLocalFile());
                 } catch (Exception e) {
-                    Toast.makeText(RepoActivity.this, "Error occurred while trying to fetch information!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(RepoActivity.this, getString(R.string.error_no_data), Toast.LENGTH_LONG).show();
                     finish();
                 }
             }
         }, error -> {
-            Toast.makeText(RepoActivity.this, "Error occurred while trying to fetch information!", Toast.LENGTH_LONG).show();
+            Toast.makeText(RepoActivity.this, getString(R.string.error_no_data), Toast.LENGTH_LONG).show();
             finish();
         });
         requestCount++;

@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
@@ -28,11 +27,9 @@ import java.util.List;
 
 import lk.ysk.githubcloner.DetailedRepository;
 import lk.ysk.githubcloner.R;
-import lk.ysk.githubcloner.Repository;
 import lk.ysk.githubcloner.User;
 import lk.ysk.githubcloner.adapters.RepositoryAdapter;
 import lk.ysk.githubcloner.adapters.UsersAdapter;
-import lk.ysk.githubcloner.interfaces.OnRepoClickedListener;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -141,10 +138,12 @@ public class SearchActivity extends AppCompatActivity {
                 rlLoading.setVisibility(View.GONE);
                 nestedScrollView.setVisibility(View.VISIBLE);
             } catch (Exception ignore) {
-
+                Toast.makeText(SearchActivity.this, getString(R.string.error_no_data), Toast.LENGTH_LONG).show();
+                finish();
             }
         }, error -> {
-
+            Toast.makeText(SearchActivity.this, getString(R.string.error_no_data), Toast.LENGTH_LONG).show();
+            finish();
         });
 
         queue.add(reposRequest);
@@ -171,10 +170,12 @@ public class SearchActivity extends AppCompatActivity {
                 rlLoading.setVisibility(View.GONE);
                 nestedScrollView.setVisibility(View.VISIBLE);
             } catch (Exception ignore) {
-
+                Toast.makeText(SearchActivity.this, getString(R.string.error_no_data), Toast.LENGTH_LONG).show();
+                finish();
             }
         }, error -> {
-
+            Toast.makeText(SearchActivity.this, getString(R.string.error_no_data), Toast.LENGTH_LONG).show();
+            finish();
         });
 
         queue.add(reposRequest);

@@ -2,16 +2,14 @@ package lk.ysk.githubcloner;
 
 public class FavouriteItem {
 
-    private String url;
-    private String name;
-    private String description;
-    private String owner;
-    private String avatarUrl;
+    private final String url;
+    private final String name;
+    private final String owner;
+    private final String avatarUrl;
 
     public FavouriteItem(DetailedRepository repository) {
         url = repository.getUrl();
         name = repository.getName();
-        description = repository.getDescription();
         owner = repository.getOwner();
         avatarUrl = repository.getAvatarUrl();
     }
@@ -22,10 +20,6 @@ public class FavouriteItem {
 
     public String getName() {
         return name;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public String getOwner() {

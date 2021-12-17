@@ -30,10 +30,6 @@ public class SegmentProgressBar extends View {
         super(context, attrs, defStyleAttr);
     }
 
-    public SegmentProgressBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
-
     public void addSegment(Integer color, float percentage) {
         segments.add(new Pair<>(color, percentage));
         invalidate();

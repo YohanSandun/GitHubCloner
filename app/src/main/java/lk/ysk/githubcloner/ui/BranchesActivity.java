@@ -24,7 +24,6 @@ import java.util.List;
 
 import lk.ysk.githubcloner.R;
 import lk.ysk.githubcloner.adapters.BranchesAdapter;
-import lk.ysk.githubcloner.interfaces.OnBranchClickedListener;
 
 public class BranchesActivity extends AppCompatActivity {
 

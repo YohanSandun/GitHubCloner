@@ -1,7 +1,5 @@
 package lk.ysk.githubcloner.ui;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,16 +24,13 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import lk.ysk.githubcloner.DetailedRepository;
-import lk.ysk.githubcloner.LanguageColors;
 import lk.ysk.githubcloner.MenuHelper;
 import lk.ysk.githubcloner.R;
-import lk.ysk.githubcloner.Repository;
 import lk.ysk.githubcloner.adapters.RepositoryAdapter;
 
 public class UserActivity extends AppCompatActivity {
@@ -110,8 +105,13 @@ public class UserActivity extends AppCompatActivity {
                 txtCreated.setText(String.format("Member since %s", response.getString("created_at").substring(0, 10)));
 
                 String blog = response.getString("blog").trim();
-                if (!blog.equals("null")&& !blog.equals(""))
+                if (!blog.equals("null")&& !blog.equals("")) {
                     txtBlog.setText(blog);
+                    txtBlog.setOnClickListener(view -> {
+                        Intent blogIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(blog));
+                        startActivity(blogIntent);
+                    });
+                }
                 else
                     txtBlog.setVisibility(View.GONE);
 
@@ -139,8 +139,10 @@ public class UserActivity extends AppCompatActivity {
                 String twitter = response.getString("twitter_username").trim();
                 if (!twitter.equals("null") && !twitter.equals("")) {
                     txtTwitter.setText(twitter);
-                    Intent twitterIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/#!/" + twitter));
-                    startActivity(twitterIntent);
+                    txtTwitter.setOnClickListener(view -> {
+                        Intent twitterIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/#!/" + twitter));
+                        startActivity(twitterIntent);
+                    });
                 }
                 else
                     txtTwitter.setVisibility(View.GONE);
@@ -149,11 +151,11 @@ public class UserActivity extends AppCompatActivity {
                     txtAdmin.setVisibility(View.VISIBLE);
 
             } catch (Exception ignore) {
-                Toast.makeText(UserActivity.this, "Error occurred while trying to fetch information!", Toast.LENGTH_LONG).show();
+                Toast.makeText(UserActivity.this, getString(R.string.error_no_data), Toast.LENGTH_LONG).show();
                 finish();
             }
         }, error -> {
-            Toast.makeText(UserActivity.this, "Error occurred while trying to fetch information!", Toast.LENGTH_LONG).show();
+            Toast.makeText(UserActivity.this, getString(R.string.error_no_data), Toast.LENGTH_LONG).show();
             finish();
         });
         queue.add(userRequest);
@@ -192,7 +194,7 @@ public class UserActivity extends AppCompatActivity {
                 try {
                     repositoriesList.add(new DetailedRepository(response.getJSONObject(i)));
                 } catch (Exception ignore) {
-                    Toast.makeText(UserActivity.this, "Error occurred while trying to fetch information!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(UserActivity.this, getString(R.string.error_no_data), Toast.LENGTH_LONG).show();
                     finish();
                 }
             }
@@ -205,7 +207,7 @@ public class UserActivity extends AppCompatActivity {
             rlLoading.setVisibility(View.GONE);
             rlProfile.setVisibility(View.VISIBLE);
         }, error -> {
-            Toast.makeText(UserActivity.this, "Error occurred while trying to fetch information!", Toast.LENGTH_LONG).show();
+            Toast.makeText(UserActivity.this, getString(R.string.error_no_data), Toast.LENGTH_LONG).show();
             finish();
         });
 
