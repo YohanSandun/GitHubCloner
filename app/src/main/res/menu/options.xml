@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/mnuLocation"
+        android:title="Download Location"/>
+    <item
+        android:id="@+id/mnuTheme"
+        android:title="Theme"/>
+    <item
+        android:id="@+id/mnuSource"
+        android:title="Source"/>
+    <item
+        android:id="@+id/mnuAbout"
+        android:title="About"/>
+    <item
+        android:id="@+id/mnuRate"
+        android:title="Rate Us"/>
+</menu>

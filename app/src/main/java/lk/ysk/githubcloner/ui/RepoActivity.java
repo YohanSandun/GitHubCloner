@@ -55,6 +55,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import lk.ysk.githubcloner.Content;
 import lk.ysk.githubcloner.ContentFile;
 import lk.ysk.githubcloner.FavouriteItem;
+import lk.ysk.githubcloner.MenuHelper;
 import lk.ysk.githubcloner.adapters.ContentsAdapter;
 import lk.ysk.githubcloner.R;
 import lk.ysk.githubcloner.adapters.RepositoryAdapter;
@@ -117,7 +118,8 @@ public class RepoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repo);
 
-        githubDir = new File(Environment.getExternalStorageDirectory(), "GitHub");
+        githubDir = new File(MainActivity.preferences.getString("download", (new File(Environment.getExternalStorageDirectory(), "GitHub")).toString()));
+
         githubDir.mkdirs();
         tempDir = new File(getFilesDir(), ".temp");
 
@@ -288,7 +290,13 @@ public class RepoActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
+
+        findViewById(R.id.btnSettings).setOnClickListener(view -> MenuHelper.showSettingsMenu(this, view, activityLauncher));
     }
+
+    private final ActivityResultLauncher<Intent> activityLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> { });
 
     private void goBack() {
         contentList.clear();

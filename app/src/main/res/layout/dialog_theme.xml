@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Light"
+            android:id="@+id/radioLight"/>
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Dark"
+            android:id="@+id/radioDark"/>
+        <RadioButton
+            android:checked="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="System Default"
+            android:id="@+id/radioSystem"/>
+
+    </RadioGroup>
+
+    <TextView
+
+        android:id="@+id/btnOk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ok"
+        android:textColor="@color/white"
+        android:background="@drawable/search_btn_bg"
+        android:layout_below="@id/radioGroup"
+        android:layout_alignParentEnd="true"
+        android:focusable="true"
+        android:clickable="true"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"/>
+
+    <TextView
+        android:id="@+id/btnCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel"
+        android:textColor="@color/white"
+        android:focusable="true"
+        android:clickable="true"
+        android:background="@drawable/search_btn_bg"
+        android:layout_below="@id/radioGroup"
+        android:layout_toStartOf="@id/btnOk"
+        android:layout_marginEnd="20dp"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"/>
+
+</RelativeLayout>

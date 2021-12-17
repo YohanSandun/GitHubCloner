@@ -14,11 +14,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GitHubCloner">
-        <activity android:name=".ui.ExternalActivity" android:exported="true">
+        <activity android:name=".ui.AboutActivity"></activity>
+        <activity
+            android:name=".ui.ExternalActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="https" />
                 <data android:host="github.com" />
             </intent-filter>
@@ -27,10 +32,10 @@
         <activity android:name=".ui.BranchesActivity" />
         <activity android:name=".ui.RepoActivity" />
         <activity android:name=".ui.UserActivity" />
-        <activity
-            android:name=".ui.MainActivity">
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

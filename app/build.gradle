@@ -11,8 +11,6 @@ android {
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -30,15 +28,13 @@ android {
 dependencies {
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'com.github.bumptech.glide:glide:4.12.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
     implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'com.obsez.android.lib.filechooser:filechooser:1.2.0'
 
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }

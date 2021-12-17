@@ -1,5 +1,9 @@
 package lk.ysk.githubcloner.ui;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -7,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,6 +33,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import lk.ysk.githubcloner.DetailedRepository;
 import lk.ysk.githubcloner.LanguageColors;
+import lk.ysk.githubcloner.MenuHelper;
 import lk.ysk.githubcloner.R;
 import lk.ysk.githubcloner.Repository;
 import lk.ysk.githubcloner.adapters.RepositoryAdapter;
@@ -110,8 +116,17 @@ public class UserActivity extends AppCompatActivity {
                     txtBlog.setVisibility(View.GONE);
 
                 String email = response.getString("email").trim();
-                if (!email.equals("null")&& !email.equals(""))
+                if (!email.equals("null")&& !email.equals("")) {
                     txtEmail.setText(email);
+                    txtEmail.setOnClickListener(view -> {
+                        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                        emailIntent.setType("plain/text");
+                        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { email });
+                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "");
+                        emailIntent.putExtra(Intent.EXTRA_TEXT, "");
+                        startActivity(Intent.createChooser(emailIntent, ""));
+                    });
+                }
                 else
                     txtEmail.setVisibility(View.GONE);
 
@@ -122,8 +137,11 @@ public class UserActivity extends AppCompatActivity {
                     txtCompany.setVisibility(View.GONE);
 
                 String twitter = response.getString("twitter_username").trim();
-                if (!twitter.equals("null") && !twitter.equals(""))
+                if (!twitter.equals("null") && !twitter.equals("")) {
                     txtTwitter.setText(twitter);
+                    Intent twitterIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/#!/" + twitter));
+                    startActivity(twitterIntent);
+                }
                 else
                     txtTwitter.setVisibility(View.GONE);
 
@@ -154,7 +172,15 @@ public class UserActivity extends AppCompatActivity {
         });
 
         loadRepositories();
+
+        findViewById(R.id.btnBack).setOnClickListener(v -> onBackPressed());
+
+        findViewById(R.id.btnSettings).setOnClickListener(view -> MenuHelper.showSettingsMenu(this, view, activityLauncher));
     }
+
+    private final ActivityResultLauncher<Intent> activityLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> { });
 
     private void loadRepositories() {
         RequestQueue queue = Volley.newRequestQueue(this);

@@ -6,24 +6,33 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
-import android.app.Activity;
+import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.MenuInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.obsez.android.lib.filechooser.ChooserDialog;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -35,6 +44,7 @@ import java.io.InputStream;
 import lk.ysk.githubcloner.FavouriteItem;
 import lk.ysk.githubcloner.Favourites;
 import lk.ysk.githubcloner.LanguageColors;
+import lk.ysk.githubcloner.MenuHelper;
 import lk.ysk.githubcloner.R;
 import lk.ysk.githubcloner.adapters.FavouritesAdapter;
 import lk.ysk.githubcloner.interfaces.OnFavouriteClickedListener;
@@ -43,12 +53,39 @@ public class MainActivity extends AppCompatActivity {
 
     public static LanguageColors languageColors;
     public static Favourites favourites;
+    public static Theme theme;
+    public static SharedPreferences preferences;
 
     private static File favouritesFile;
 
     private FavouritesAdapter favouritesAdapter;
     private RecyclerView lstFavs;
     private TextView txtFavourites;
+
+    public enum Theme {
+        SYSTEM_DEFAULT(0), LIGHT(1), DARK(2);
+
+        private final int value;
+        Theme(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        public static Theme fromInteger(int i) {
+            switch (i) {
+                case 0:
+                default:
+                    return SYSTEM_DEFAULT;
+                case 1:
+                    return LIGHT;
+                case 2:
+                    return DARK;
+            }
+        }
+    }
 
     public static void loadStaticStuff(Context context) {
         favouritesFile = new File(context.getFilesDir(), "favourites.json");
@@ -107,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private ActivityResultLauncher<Intent> searchActivityLauncher = registerForActivityResult(
+    private final ActivityResultLauncher<Intent> searchActivityLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
@@ -123,6 +160,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        theme = Theme.fromInteger(preferences.getInt("theme", 0));
+        if (theme == Theme.SYSTEM_DEFAULT)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        else if (theme == Theme.LIGHT)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        else if (theme == Theme.DARK)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
         loadStaticStuff(this);
 
@@ -170,31 +216,27 @@ public class MainActivity extends AppCompatActivity {
 
         EditText txtTerm = findViewById(R.id.txtSearch);
 
-        findViewById(R.id.btnSearchUsers).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String term = parseQuery(txtTerm.getText().toString());
-                if (!term.equals("")) {
-                    Intent intent = new Intent(MainActivity.this, SearchActivity.class);
-                    intent.putExtra("term", term);
-                    intent.putExtra("type", "user");
-                    searchActivityLauncher.launch(intent);
-                }
+        findViewById(R.id.btnSearchUsers).setOnClickListener(view -> {
+            String term = parseQuery(txtTerm.getText().toString());
+            if (!term.equals("")) {
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                intent.putExtra("term", term);
+                intent.putExtra("type", "user");
+                searchActivityLauncher.launch(intent);
             }
         });
 
-        findViewById(R.id.btnSearchRepos).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String term = parseQuery(txtTerm.getText().toString());
-                if (!term.equals("")) {
-                    Intent intent = new Intent(MainActivity.this, SearchActivity.class);
-                    intent.putExtra("term", term);
-                    intent.putExtra("type", "repo");
-                    searchActivityLauncher.launch(intent);
-                }
+        findViewById(R.id.btnSearchRepos).setOnClickListener(v -> {
+            String term = parseQuery(txtTerm.getText().toString());
+            if (!term.equals("")) {
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                intent.putExtra("term", term);
+                intent.putExtra("type", "repo");
+                searchActivityLauncher.launch(intent);
             }
         });
+
+        findViewById(R.id.btnSettings).setOnClickListener(view -> MenuHelper.showSettingsMenu(this, view, searchActivityLauncher));
     }
 
     private static String loadJSONFromAsset(Context context) {
