@@ -224,7 +224,9 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Enter search query first!", Toast.LENGTH_LONG).show();
         });
 
-        findViewById(R.id.btnSettings).setOnClickListener(view -> MenuHelper.showSettingsMenu(this, view, searchActivityLauncher));
+        findViewById(R.id.btnSettings).setOnClickListener(view ->
+                MenuHelper.showSettingsMenu(this, view, searchActivityLauncher)
+        );
     }
 
     private static String loadJSONFromAsset(Context context) {

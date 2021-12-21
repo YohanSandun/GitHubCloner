@@ -46,6 +46,7 @@
             android:clickable="true"
             android:id="@+id/btnSettings"
             android:focusable="true"
+            android:src="@drawable/ic_more"
             android:contentDescription="@string/settings" />
 
     </RelativeLayout>

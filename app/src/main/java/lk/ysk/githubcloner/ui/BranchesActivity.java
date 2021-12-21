@@ -1,5 +1,7 @@
 package lk.ysk.githubcloner.ui;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -22,6 +24,7 @@ import com.android.volley.toolbox.Volley;
 import java.util.ArrayList;
 import java.util.List;
 
+import lk.ysk.githubcloner.MenuHelper;
 import lk.ysk.githubcloner.R;
 import lk.ysk.githubcloner.adapters.BranchesAdapter;
 
@@ -100,5 +103,15 @@ public class BranchesActivity extends AppCompatActivity {
         });
 
         queue.add(reposRequest);
+
+        findViewById(R.id.btnSettings).setOnClickListener(view ->
+                MenuHelper.showSettingsMenu(this, view, activityLauncher)
+        );
+
+        findViewById(R.id.btnBack).setOnClickListener(view -> onBackPressed());
     }
+
+    private final ActivityResultLauncher<Intent> activityLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> { });
 }
